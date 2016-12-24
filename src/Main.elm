@@ -3,7 +3,7 @@ module Main exposing (..)
 import Task exposing (Task)
 import Html exposing (Html, div, button, text)
 import Http
-import GetItem as GetItem exposing (Item)
+import Item as Item exposing (getItem)
 
 
 main =
