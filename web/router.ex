@@ -13,14 +13,12 @@ defmodule Gannbaruzoi.Router do
     plug :accepts, ["json"]
   end
 
+  forward "/api", Absinthe.Plug, schema: Gannbaruzoi.Schema
+  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Gannbaruzoi.Schema
+
   scope "/", Gannbaruzoi do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", Gannbaruzoi do
-  #   pipe_through :api
-  # end
 end
