@@ -6,6 +6,9 @@ defmodule Gannbaruzoi.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema
 
+  alias Gannbaruzoi.Task
+  alias Gannbaruzoi.Repo
+
   @tasks [
     %{id: 1, description: "Todo 1", estimated_size: 1,
       type: "parent", status: false},
@@ -40,7 +43,8 @@ defmodule Gannbaruzoi.Schema do
   query do
     field :tasks, list_of(:task) do
       resolve fn _, _ ->
-        {:ok, @tasks}
+        tasks = Repo.all(Task)
+        {:ok, tasks}
       end
     end
   end
@@ -55,13 +59,19 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :task, :task
       end
-      resolve fn _, _ ->
-        {:ok, %{task: List.first(@tasks)}}
+      resolve fn _parent, attributes, _info ->
+        IO.inspect attributes
+        changeset = Task.changeset(%Task{type: "root"}, attributes)
+        case Repo.insert(changeset) do
+          {:ok, task} -> {:ok, %{task: task}}
+          {:error, changeset} -> {:error, changeset.errors}
+        end
       end
     end
 
     payload field :update_task do
       input do
+        field :id, non_null(:id)
         field :estimated_size, :integer
         field :description, :string
         field :root_flg, :boolean
@@ -70,8 +80,13 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :task, :task
       end
-      resolve fn _, _ ->
-        {:ok, %{task: List.first(@tasks)}}
+      resolve fn _parent, attributes, _info ->
+        IO.inspect attributes
+        changeset = Repo.get!(Task, attributes.id) |> Task.changeset(attributes)
+        case Repo.update(changeset) do
+          {:ok, task} -> {:ok, %{task: task}}
+          {:error, changeset} -> {:error, changeset.errors}
+        end
       end
     end
 
@@ -82,8 +97,11 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :id, :id
       end
-      resolve fn _, _ ->
-        {:ok, %{id: 1}}
+      resolve fn _parent, attributes, _info ->
+        IO.inspect attributes
+        task = Repo.get!(Task, attributes.id)
+        Repo.delete(task)
+        {:ok, %{id: task.id}}
       end
     end
 
