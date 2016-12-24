@@ -1,8 +1,9 @@
 defmodule Gannbaruzoi.Schema do
-  use Absinthe.Schema
   @moduledoc """
   Graphql schema
   """
+
+  use Absinthe.Schema
 
   # Example data
   @items %{

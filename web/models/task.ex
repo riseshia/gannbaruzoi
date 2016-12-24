@@ -1,8 +1,9 @@
 defmodule Gannbaruzoi.Task do
-  use Gannbaruzoi.Web, :model
   @moduledoc """
   Task model
   """
+
+  use Gannbaruzoi.Web, :model
 
   schema "tasks" do
     field :description, :string

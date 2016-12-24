@@ -1,8 +1,9 @@
 defmodule Gannbaruzoi.User do
-  use Gannbaruzoi.Web, :model
   @moduledoc """
   User model
   """
+
+  use Gannbaruzoi.Web, :model
 
   schema "users" do
     field :email, :string

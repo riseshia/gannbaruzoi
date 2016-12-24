@@ -1,8 +1,9 @@
 defmodule Gannbaruzoi.Log do
-  use Gannbaruzoi.Web, :model
   @moduledoc """
   Log model
   """
+
+  use Gannbaruzoi.Web, :model
 
   schema "logs" do
     belongs_to :task, Gannbaruzoi.Task
