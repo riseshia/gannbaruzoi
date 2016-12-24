@@ -1,0 +1,5 @@
+query GetItem {
+  item(id: 1) {
+    id
+  }
+}
