@@ -13,6 +13,11 @@ defmodule GannbaruzoiElixir.Mixfile do
      deps: deps()]
   end
 
+  def preferred_cli_env do
+    ["t": :test,
+     "test.setup": :test]
+  end
+
   # Configuration for the OTP application.
   #
   # Type `mix help compile.app` for more information.
@@ -37,7 +42,9 @@ defmodule GannbaruzoiElixir.Mixfile do
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:credo, "~> 0.5", only: [:dev, :test]}
+   ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
