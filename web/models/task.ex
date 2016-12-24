@@ -11,6 +11,7 @@ defmodule Gannbaruzoi.Task do
     field :type, :string
     field :status, :boolean, default: false
     belongs_to :user, Gannbaruzoi.User
+    has_many :logs, Gannbaruzoi.Log
 
     timestamps()
   end

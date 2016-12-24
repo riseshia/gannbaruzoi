@@ -5,10 +5,20 @@ defmodule Gannbaruzoi.Log do
 
   use Gannbaruzoi.Web, :model
 
+  alias Gannbaruzoi.Repo
+  alias Gannbaruzoi.Task
+
   schema "logs" do
     belongs_to :task, Gannbaruzoi.Task
 
     timestamps()
+  end
+
+  def first_of(task_id) do
+    Repo.get Task, task_id
+    |> Ecto.assoc(:logs)
+    |> first
+    |> Repo.one
   end
 
   @doc """

@@ -5,8 +5,8 @@ defmodule Gannbaruzoi.Schema do
 
   use Absinthe.Schema
   use Absinthe.Relay.Schema
-
   alias Gannbaruzoi.Task
+  alias Gannbaruzoi.Log
   alias Gannbaruzoi.Repo
 
   @tasks [
@@ -112,8 +112,9 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :log, :log
       end
-      resolve fn _, _ ->
-        {:ok, %{log: List.first(@logs)}}
+      resolve fn %{task_id: task_id}, _ ->
+        log = %Log{task_id: task_id} |> Repo.insert!
+        {:ok, %{log: log}}
       end
     end
 
@@ -124,8 +125,10 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :id, :id
       end
-      resolve fn _, _ ->
-        {:ok, %{id: 1}}
+      resolve fn %{task_id: task_id}, _ ->
+        log = Log.first_of(task_id)
+        log |> Repo.delete
+        {:ok, %{id: log.id}}
       end
     end
   end
