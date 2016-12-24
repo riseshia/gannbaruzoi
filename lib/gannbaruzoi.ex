@@ -1,4 +1,8 @@
 defmodule Gannbaruzoi do
+  @moduledoc """
+  Gannbaruzoi Application
+  """
+
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
