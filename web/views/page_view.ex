@@ -1,3 +1,3 @@
-defmodule GannbaruzoiElixir.PageView do
-  use GannbaruzoiElixir.Web, :view
+defmodule Gannbaruzoi.PageView do
+  use Gannbaruzoi.Web, :view
 end

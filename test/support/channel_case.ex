@@ -1,4 +1,4 @@
-defmodule GannbaruzoiElixir.ChannelCase do
+defmodule Gannbaruzoi.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -20,22 +20,22 @@ defmodule GannbaruzoiElixir.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
 
-      alias GannbaruzoiElixir.Repo
+      alias Gannbaruzoi.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
 
 
       # The default endpoint for testing
-      @endpoint GannbaruzoiElixir.Endpoint
+      @endpoint Gannbaruzoi.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(GannbaruzoiElixir.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gannbaruzoi.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(GannbaruzoiElixir.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
     end
 
     :ok

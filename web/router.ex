@@ -1,5 +1,5 @@
-defmodule GannbaruzoiElixir.Router do
-  use GannbaruzoiElixir.Web, :router
+defmodule Gannbaruzoi.Router do
+  use Gannbaruzoi.Web, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,14 +13,14 @@ defmodule GannbaruzoiElixir.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", GannbaruzoiElixir do
+  scope "/", Gannbaruzoi do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", GannbaruzoiElixir do
+  # scope "/api", Gannbaruzoi do
   #   pipe_through :api
   # end
 end

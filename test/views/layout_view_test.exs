@@ -1,3 +1,3 @@
-defmodule GannbaruzoiElixir.LayoutViewTest do
-  use GannbaruzoiElixir.ConnCase, async: true
+defmodule Gannbaruzoi.LayoutViewTest do
+  use Gannbaruzoi.ConnCase, async: true
 end

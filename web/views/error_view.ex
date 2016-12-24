@@ -1,5 +1,5 @@
-defmodule GannbaruzoiElixir.ErrorView do
-  use GannbaruzoiElixir.Web, :view
+defmodule Gannbaruzoi.ErrorView do
+  use Gannbaruzoi.Web, :view
 
   def render("404.html", _assigns) do
     "Page not found"

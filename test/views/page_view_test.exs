@@ -1,3 +1,3 @@
-defmodule GannbaruzoiElixir.PageViewTest do
-  use GannbaruzoiElixir.ConnCase, async: true
+defmodule Gannbaruzoi.PageViewTest do
+  use Gannbaruzoi.ConnCase, async: true
 end

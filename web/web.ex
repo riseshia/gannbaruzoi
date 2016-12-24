@@ -1,12 +1,12 @@
-defmodule GannbaruzoiElixir.Web do
+defmodule Gannbaruzoi.Web do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
 
   This can be used in your application as:
 
-      use GannbaruzoiElixir.Web, :controller
-      use GannbaruzoiElixir.Web, :view
+      use Gannbaruzoi.Web, :controller
+      use Gannbaruzoi.Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -30,12 +30,12 @@ defmodule GannbaruzoiElixir.Web do
     quote do
       use Phoenix.Controller
 
-      alias GannbaruzoiElixir.Repo
+      alias Gannbaruzoi.Repo
       import Ecto
       import Ecto.Query
 
-      import GannbaruzoiElixir.Router.Helpers
-      import GannbaruzoiElixir.Gettext
+      import Gannbaruzoi.Router.Helpers
+      import Gannbaruzoi.Gettext
     end
   end
 
@@ -49,9 +49,9 @@ defmodule GannbaruzoiElixir.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import GannbaruzoiElixir.Router.Helpers
-      import GannbaruzoiElixir.ErrorHelpers
-      import GannbaruzoiElixir.Gettext
+      import Gannbaruzoi.Router.Helpers
+      import Gannbaruzoi.ErrorHelpers
+      import Gannbaruzoi.Gettext
     end
   end
 
@@ -65,10 +65,10 @@ defmodule GannbaruzoiElixir.Web do
     quote do
       use Phoenix.Channel
 
-      alias GannbaruzoiElixir.Repo
+      alias Gannbaruzoi.Repo
       import Ecto
       import Ecto.Query
-      import GannbaruzoiElixir.Gettext
+      import Gannbaruzoi.Gettext
     end
   end
 

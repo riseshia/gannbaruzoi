@@ -6,15 +6,15 @@
 use Mix.Config
 
 # General application configuration
-config :gannbaruzoi_elixir,
-  ecto_repos: [GannbaruzoiElixir.Repo]
+config :gannbaruzoi,
+  ecto_repos: [Gannbaruzoi.Repo]
 
 # Configures the endpoint
-config :gannbaruzoi_elixir, GannbaruzoiElixir.Endpoint,
+config :gannbaruzoi, Gannbaruzoi.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "9wFfMKO7EPkb41ReVbJak16qk0IhOSD851mvUJJILsq4GK+2EmF+wEZOuP/HReUX",
-  render_errors: [view: GannbaruzoiElixir.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: GannbaruzoiElixir.PubSub,
+  render_errors: [view: Gannbaruzoi.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Gannbaruzoi.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

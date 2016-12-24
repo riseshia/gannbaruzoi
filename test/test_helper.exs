@@ -1,4 +1,4 @@
 ExUnit.start
 
-Ecto.Adapters.SQL.Sandbox.mode(GannbaruzoiElixir.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, :manual)
 

@@ -42,6 +42,7 @@ _build/
 node_modules/
 /priv/static/
 /config/prod.secret.exs
+/config/dev.secret.exs
 /rel
 
 

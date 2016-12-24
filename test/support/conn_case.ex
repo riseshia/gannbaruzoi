@@ -1,4 +1,4 @@
-defmodule GannbaruzoiElixir.ConnCase do
+defmodule Gannbaruzoi.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -20,23 +20,23 @@ defmodule GannbaruzoiElixir.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
 
-      alias GannbaruzoiElixir.Repo
+      alias Gannbaruzoi.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
 
-      import GannbaruzoiElixir.Router.Helpers
+      import Gannbaruzoi.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint GannbaruzoiElixir.Endpoint
+      @endpoint Gannbaruzoi.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(GannbaruzoiElixir.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gannbaruzoi.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(GannbaruzoiElixir.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

@@ -1,4 +1,4 @@
-defmodule GannbaruzoiElixir.ErrorHelpers do
+defmodule Gannbaruzoi.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -32,9 +32,9 @@ defmodule GannbaruzoiElixir.ErrorHelpers do
     #     dgettext "errors", "is invalid"
     #
     if count = opts[:count] do
-      Gettext.dngettext(GannbaruzoiElixir.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(Gannbaruzoi.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(GannbaruzoiElixir.Gettext, "errors", msg, opts)
+      Gettext.dgettext(Gannbaruzoi.Gettext, "errors", msg, opts)
     end
   end
 end

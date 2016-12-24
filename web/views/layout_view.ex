@@ -1,3 +1,3 @@
-defmodule GannbaruzoiElixir.LayoutView do
-  use GannbaruzoiElixir.Web, :view
+defmodule Gannbaruzoi.LayoutView do
+  use Gannbaruzoi.Web, :view
 end

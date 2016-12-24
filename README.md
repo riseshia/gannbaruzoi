@@ -1,4 +1,4 @@
-# GannbaruzoiElixir
+# Gannbaruzoi
 
 To start your Phoenix app:
 

@@ -1,4 +1,4 @@
-defmodule GannbaruzoiElixir.ModelCase do
+defmodule Gannbaruzoi.ModelCase do
   @moduledoc """
   This module defines the test case to be used by
   model tests.
@@ -16,20 +16,20 @@ defmodule GannbaruzoiElixir.ModelCase do
 
   using do
     quote do
-      alias GannbaruzoiElixir.Repo
+      alias Gannbaruzoi.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import GannbaruzoiElixir.ModelCase
+      import Gannbaruzoi.ModelCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(GannbaruzoiElixir.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gannbaruzoi.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(GannbaruzoiElixir.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
     end
 
     :ok
@@ -59,7 +59,7 @@ defmodule GannbaruzoiElixir.ModelCase do
   """
   def errors_on(struct, data) do
     struct.__struct__.changeset(struct, data)
-    |> Ecto.Changeset.traverse_errors(&GannbaruzoiElixir.ErrorHelpers.translate_error/1)
+    |> Ecto.Changeset.traverse_errors(&Gannbaruzoi.ErrorHelpers.translate_error/1)
     |> Enum.flat_map(fn {key, errors} -> for msg <- errors, do: {key, msg} end)
   end
 end
