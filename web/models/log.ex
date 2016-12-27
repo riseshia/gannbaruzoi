@@ -15,8 +15,8 @@ defmodule Gannbaruzoi.Log do
   end
 
   def first_of(task_id) do
-    Repo.get Task, task_id
-    |> Ecto.assoc(:logs)
+    task = Repo.get Task, task_id
+    Ecto.assoc(task, :logs)
     |> first
     |> Repo.one
   end
