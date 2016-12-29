@@ -15,10 +15,7 @@ defmodule Gannbaruzoi.Log do
   end
 
   def first_of(task_id) do
-    task = Repo.get Task, task_id
-    Ecto.assoc(task, :logs)
-    |> first
-    |> Repo.one
+    Repo.one from l in __MODULE__, where: l.task_id == ^task_id, limit: 1
   end
 
   @doc """

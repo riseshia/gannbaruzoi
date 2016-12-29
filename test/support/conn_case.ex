@@ -26,6 +26,7 @@ defmodule Gannbaruzoi.ConnCase do
       import Ecto.Query
 
       import Gannbaruzoi.Router.Helpers
+      import Gannbaruzoi.InsertHelper
 
       # The default endpoint for testing
       @endpoint Gannbaruzoi.Endpoint

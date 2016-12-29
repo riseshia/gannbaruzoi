@@ -1,4 +1,7 @@
 defmodule Gannbaruzoi.TaskResolver do
+  @moduledoc """
+  The resolvers of task
+  """
   alias Gannbaruzoi.Repo
   alias Gannbaruzoi.Task
 
@@ -18,7 +21,7 @@ defmodule Gannbaruzoi.TaskResolver do
   end
 
   def update(_parent, attributes, _info) do
-    changeset = Repo.get!(Task, attributes.id) |> Task.changeset(attributes)
+    changeset = Task |> Repo.get!(attributes.id) |> Task.changeset(attributes)
 
     case Repo.update(changeset) do
       {:ok, task} -> {:ok, %{task: task}}

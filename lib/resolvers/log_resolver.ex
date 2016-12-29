@@ -1,4 +1,7 @@
 defmodule Gannbaruzoi.LogResolver do
+  @moduledoc """
+  The resolvers of log
+  """
   alias Gannbaruzoi.Repo
   alias Gannbaruzoi.Log
 

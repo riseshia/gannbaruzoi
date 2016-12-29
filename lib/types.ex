@@ -1,4 +1,7 @@
 defmodule Gannbaruzoi.Types do
+  @moduledoc """
+  GraphQL Types
+  """
   use Absinthe.Schema.Notation
 
   @desc "A task"
