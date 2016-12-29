@@ -6,12 +6,15 @@ defmodule Gannbaruzoi.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema
 
+  alias Gannbaruzoi.LogResolver
+  alias Gannbaruzoi.TaskResolver
+
   import_types Gannbaruzoi.Types
 
   query do
     @desc "Get all tasks of current user"
     field :tasks, list_of(:task) do
-      resolve &Resolver.all/2
+      resolve &TaskResolver.all/2
     end
   end
 
@@ -26,7 +29,7 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :task, :task
       end
-      resolve &Resolver.create/3
+      resolve &TaskResolver.create/3
     end
 
     @desc "Update the task"
@@ -41,7 +44,7 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :task, :task
       end
-      resolve &Resolver.update/3
+      resolve &TaskResolver.update/3
     end
 
     @desc "Delete the task"
@@ -52,7 +55,7 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :id, :id
       end
-      resolve &Resolver.delete/3
+      resolve &TaskResolver.delete/3
     end
 
     @desc "Create a log to specific task"
@@ -63,7 +66,7 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :log, :log
       end
-      resolve &Resolver.create_log/2
+      resolve &LogResolver.create/2
     end
 
     @desc "Delete a log from specific task"
@@ -74,7 +77,7 @@ defmodule Gannbaruzoi.Schema do
       output do
         field :id, :id
       end
-      resolve &Resolver.delete_log/2
+      resolve &LogResolver.delete/2
     end
   end
 end
