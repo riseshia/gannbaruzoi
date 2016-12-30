@@ -5,20 +5,20 @@ defmodule Gannbaruzoi.Log do
 
   use Gannbaruzoi.Web, :model
 
-  alias Gannbaruzoi.Repo
   alias Gannbaruzoi.Task
 
   schema "logs" do
-    belongs_to :task, Gannbaruzoi.Task
+    belongs_to :task, Task
 
     timestamps()
   end
 
-  def first_of(task_id) do
-    Repo.get Task, task_id
-    |> Ecto.assoc(:logs)
-    |> first
-    |> Repo.one
+  def by_task_id(query, task_id) do
+    where(query, ^[task_id: task_id])
+  end
+
+  def recent(query \\ __MODULE__) do
+    order_by(query, ^[desc: :inserted_at])
   end
 
   @doc """
