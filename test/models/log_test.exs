@@ -2,6 +2,7 @@ defmodule Gannbaruzoi.LogTest do
   use Gannbaruzoi.ModelCase
 
   alias Gannbaruzoi.Log
+  alias Gannbaruzoi.Repo
 
   @valid_attrs %{}
 
@@ -10,11 +11,11 @@ defmodule Gannbaruzoi.LogTest do
     assert changeset.valid?
   end
 
-  test "get first log from task" do
-    user = insert_user()
-    task = insert_task(user, description: "New todo", estimated_size: 1)
-    log = insert_log(task.id)
+  test "get last log from task" do
+    task = insert_user()
+           |> insert_task(description: "New todo", estimated_size: 1)
+    log = insert_log(task)
 
-    assert Log.first_of(task.id) == log
+    assert ^log = Log |> Log.by_task_id(task.id) |> Log.recent() |> Repo.one()
   end
 end

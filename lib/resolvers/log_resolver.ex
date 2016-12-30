@@ -14,7 +14,7 @@ defmodule Gannbaruzoi.LogResolver do
   end
 
   def delete(%{task_id: task_id}, _info) do
-    log = Log.first_of(task_id)
+    log = Log |> Log.by_task_id(task_id) |> Log.recent() |> Repo.one()
     Repo.delete(log)
     {:ok, %{id: log.id}}
   end

@@ -23,8 +23,8 @@ defmodule Gannbaruzoi.InsertHelper do
     |> Repo.insert!
   end
 
-  def insert_log(task_id) do
-    %Log{task_id: task_id}
+  def insert_log(task) do
+    %Log{task_id: task.id}
     |> Repo.insert!
   end
 end
