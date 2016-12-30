@@ -18,4 +18,11 @@ defmodule Gannbaruzoi.Types do
     field :id, :id
     field :task_id, :id
   end
+
+  @desc "An auth"
+  object :auth do
+    field :uid, :string
+    field :client, :string
+    field :access_token, :string
+  end
 end

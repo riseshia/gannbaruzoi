@@ -10,7 +10,10 @@ defmodule Gannbaruzoi.User do
 
   schema "users" do
     field :email, :string
-    field :tokens, :map, virtual: true, default: %{}
+    field :password, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
+    field :encrypted_password, :string, virtual: true # TODO: get real
+    field :tokens, :map, virtual: true, default: %{} # TODO: get real
     field :auth, :map, virtual: true, default: %{}
 
     timestamps()
@@ -49,6 +52,9 @@ defmodule Gannbaruzoi.User do
     %__MODULE__{ user | tokens: tokens }
   end
 
+  def match_password?(user, password) do
+    true
+  end
 
   defp random_string(length) do
     length

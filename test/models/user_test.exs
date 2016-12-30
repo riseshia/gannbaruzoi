@@ -52,4 +52,12 @@ defmodule Gannbaruzoi.UserTest do
       assert nil == Map.get(user.tokens, client)
     end
   end
+
+  describe "match_password?/2" do
+    test "deletes client" do
+      password = "alice1234"
+      user = insert_user(email: "hey@gmail.com", password: password)
+      assert User.match_password?(user, password)
+    end
+  end
 end
