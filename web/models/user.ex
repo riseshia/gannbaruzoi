@@ -6,9 +6,12 @@ defmodule Gannbaruzoi.User do
   use Gannbaruzoi.Web, :model
   alias Gannbaruzoi.User
   alias Gannbaruzoi.Repo
+  alias Gannbaruzoi.Auth
 
   schema "users" do
     field :email, :string
+    field :tokens, :map, virtual: true, default: %{}
+    field :auth, :map, virtual: true, default: %{}
 
     timestamps()
   end
@@ -23,6 +26,35 @@ defmodule Gannbaruzoi.User do
       %User{email: "dummy@email.com"}
       |> Repo.insert!
     end
+  end
+
+  def create_session(user) do
+    token = random_string(40)
+    client = random_string(40)
+
+    auth = %Auth{uid: user.email, token: token, client: client}
+
+    new_tokens =
+      user
+      |> Map.get(:tokens, %{})
+      |> Map.put(client, %{
+           token: token,
+           expiry: 1111
+         })
+    %__MODULE__{ user | tokens: new_tokens, auth: auth }
+  end
+
+  def delete_session(user, client) do
+    tokens = Map.delete(user.tokens, client)
+    %__MODULE__{ user | tokens: tokens }
+  end
+
+
+  defp random_string(length) do
+    length
+    |> :crypto.strong_rand_bytes()
+    |> Base.url_encode64()
+    |> binary_part(0, length)
   end
 
   @doc """
