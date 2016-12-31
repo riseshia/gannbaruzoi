@@ -148,7 +148,6 @@ defmodule Gannbaruzoi.TasksTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w/description estimated_size id status type/
       assert to_string(task.id) == actual_id 
     end
 
