@@ -22,7 +22,7 @@ defmodule Gannbaruzoi.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Gannbaruzoi.ModelCase
-      import Gannbaruzoi.InsertHelper
+      import Gannbaruzoi.Factory
     end
   end
 
