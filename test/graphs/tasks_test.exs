@@ -6,8 +6,8 @@ defmodule Gannbaruzoi.TasksTest do
     insert!(:task, user: user)
   end
 
-  describe "query Tasks" do
-    test "query tasks returns all task" do
+  describe "query tasks" do
+    test "returns all tasks" do
       task_with_user!
       {:ok, %{data: %{"tasks" => [task]}}} =
         """
@@ -22,13 +22,13 @@ defmodule Gannbaruzoi.TasksTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w/description estimated_size id status type/
+      expected_keys = ~w(description estimated_size id status type)
       assert expected_keys == Map.keys(task)
     end
   end
 
-  describe "mutation CreateTask" do
-    test "returns new task" do
+  describe "mutation createTask" do
+    test "returns new task with valid args" do
       {:ok, %{data: %{"createTask" => %{"task" => task}}}} =
         """
         mutation {
@@ -49,11 +49,11 @@ defmodule Gannbaruzoi.TasksTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w/description estimated_size id status type/
+      expected_keys = ~w(description estimated_size id status type)
       assert expected_keys == Map.keys(task)
     end
 
-    test "fail to create as invalid args" do
+    test "fails to create with invalid args" do
       {:ok, %{errors: errors}} =
         """
         mutation {
@@ -78,10 +78,10 @@ defmodule Gannbaruzoi.TasksTest do
     end
   end
 
-  describe "mutation Update Task" do
-    test "updates task" do
+  describe "mutation updateTask" do
+    test "updates task with valid args" do
       task = task_with_user!
-      
+
       {:ok, %{data: %{"updateTask" => %{"task" => task}}}} =
         """
         mutation {
@@ -103,11 +103,11 @@ defmodule Gannbaruzoi.TasksTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w/description estimated_size id status type/
+      expected_keys = ~w(description estimated_size id status type)
       assert expected_keys == Map.keys(task)
     end
 
-    test "fails to update task" do
+    test "fails to update task with invalid args" do
       {:ok, %{errors: errors}} =
         """
         mutation {
@@ -132,8 +132,8 @@ defmodule Gannbaruzoi.TasksTest do
     end
   end
 
-  describe "mutation Delete Task" do
-    test "deletes task" do
+  describe "mutation deleteTask" do
+    test "deletes task with valid args" do
       task = task_with_user!
 
       {:ok, %{data: %{"deleteTask" => %{"id" => actual_id}}}} =
@@ -148,10 +148,10 @@ defmodule Gannbaruzoi.TasksTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      assert to_string(task.id) == actual_id 
+      assert to_string(task.id) == actual_id
     end
 
-    test "fails to delete task" do
+    test "fails to delete task with invalid args" do
       {:ok, %{errors: errors}} =
         """
         mutation {

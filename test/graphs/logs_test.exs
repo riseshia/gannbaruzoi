@@ -10,8 +10,8 @@ defmodule Gannbaruzoi.LogsTest do
     insert!(:log, task_id: task!.id)
   end
 
-  describe "mutation CreateLog" do
-    test "returns new log" do
+  describe "mutation createLog" do
+    test "returns new log with valid args" do
       {:ok, %{data: %{"createLog" => %{"log" => log}}}} =
         """
         mutation {
@@ -27,11 +27,11 @@ defmodule Gannbaruzoi.LogsTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w/id task_id/
+      expected_keys = ~w(id task_id)
       assert expected_keys == Map.keys(log)
     end
 
-    test "fail to create as invalid args" do
+    test "fails to create with invalid args" do
       {:ok, %{errors: errors}} =
         """
         mutation {
@@ -51,8 +51,8 @@ defmodule Gannbaruzoi.LogsTest do
     end
   end
 
-  describe "mutation Delete Log" do
-    test "deletes log" do
+  describe "mutation deleteLog" do
+    test "deletes log with valid args" do
       log = log!
       {:ok, %{data: %{"deleteLog" => %{"id" => actual_id}}}} =
         """
@@ -66,10 +66,10 @@ defmodule Gannbaruzoi.LogsTest do
         }
         """
         |> Absinthe.run(Gannbaruzoi.Schema)
-      assert to_string(log.id) == actual_id 
+      assert to_string(log.id) == actual_id
     end
 
-    test "fails to delete log" do
+    test "fails to delete log with invalid args" do
       {:ok, %{errors: errors}} =
         """
         mutation {
