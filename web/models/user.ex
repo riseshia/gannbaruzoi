@@ -6,7 +6,6 @@ defmodule Gannbaruzoi.User do
   use Gannbaruzoi.Web, :model
   alias Gannbaruzoi.User
   alias Gannbaruzoi.Repo
-  alias Gannbaruzoi.Auth
 
   schema "users" do
     field :email, :string
@@ -31,7 +30,7 @@ defmodule Gannbaruzoi.User do
     end
   end
 
-  def create_session(user) do
+  def build_session(user) do
     token = random_string(40)
     client = random_string(40)
 
@@ -44,7 +43,7 @@ defmodule Gannbaruzoi.User do
         expiry: 1111
       })
 
-    cast(user, %{tokens: new_tokens, auth: auth }, [:tokens, :auth])
+    cast(user, %{tokens: new_tokens, auth: auth}, [:tokens, :auth])
   end
 
   def delete_session(user, client) do

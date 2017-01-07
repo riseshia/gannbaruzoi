@@ -21,27 +21,31 @@ defmodule Gannbaruzoi.UserTest do
   end
 
   describe "find_or_create_dummy/0" do
-    test "find_or_create_dummy with registed user" do
+    test "find registered user" do
       expected_email = "exist@email.com"
       %User{email: expected_email} |> Repo.insert!
       user = User.find_or_create_dummy
       assert expected_email == user.email
     end
+
+    test "create dummy user" do
+      assert %User{} = User.find_or_create_dummy
+    end
   end
 
-  describe "create_session/2" do
+  describe "build_session/2" do
     test "create auth and tokens" do
       email = "hey-man@gmail.com"
       %User{email: email} |> Repo.insert!
       auth = Repo.get_by!(User, email: email)
-             |> User.create_session()
+             |> User.build_session()
              |> Repo.update!
              |> Map.get(:auth)
 
       user = Repo.get_by!(User, email: email)
 
-      assert email == auth.uid
       refute nil == auth
+      assert email == auth.uid
       assert nil == user.tokens["no-exist"]
       assert auth.token == user.tokens[auth.client]["token"]
       assert 1111 == user.tokens[auth.client]["expiry"]
@@ -53,7 +57,7 @@ defmodule Gannbaruzoi.UserTest do
       email = "hey-man@gmail.com"
       %User{email: email} |> Repo.insert!
       client = Repo.get_by!(User, email: email)
-               |> User.create_session()
+               |> User.build_session()
                |> Repo.update!
                |> Map.get(:auth)
                |> Map.get(:client)
@@ -70,6 +74,7 @@ defmodule Gannbaruzoi.UserTest do
       password = "alice1234"
       user = insert_user(email: "hey@gmail.com", password: password)
       assert User.match_password?(user, password)
+      # refute User.match_password?(user, "worng-password")
     end
   end
 end

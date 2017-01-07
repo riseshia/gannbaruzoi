@@ -1,6 +1,6 @@
 defmodule Gannbaruzoi.AuthResolver do
   @moduledoc """
-  The resolvers of log
+  The resolvers of auth
   """
   alias Gannbaruzoi.Repo
   alias Gannbaruzoi.User
@@ -8,7 +8,7 @@ defmodule Gannbaruzoi.AuthResolver do
   def create(input, _info) do
     user = Repo.get_by(User, email: input.email)
     if User.match_password?(user, input.password) do
-      case Repo.update(User.create_session(user)) do
+      case Repo.update(User.build_session(user)) do
         {:ok, user} -> {:ok, %{auth: user.auth}}
         {:error, changeset} -> {:error, changeset.errors}
       end
