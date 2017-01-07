@@ -7,7 +7,7 @@ defmodule Gannbaruzoi.LogsTest do
   end
 
   def log! do
-    insert!(:log, task_id: task!.id)
+    insert!(:log, task_id: task!().id)
   end
 
   describe "mutation createLog" do
@@ -17,7 +17,7 @@ defmodule Gannbaruzoi.LogsTest do
         mutation {
           createLog(input: {
             clientMutationId: "1",
-            taskId: #{task!.id}
+            taskId: #{task!().id}
           }) {
             log {
               id
@@ -53,7 +53,8 @@ defmodule Gannbaruzoi.LogsTest do
 
   describe "mutation deleteLog" do
     test "deletes log with valid args" do
-      log = log!
+      log = log!()
+
       {:ok, %{data: %{"deleteLog" => %{"id" => actual_id}}}} =
         """
         mutation {

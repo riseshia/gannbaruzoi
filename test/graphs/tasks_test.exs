@@ -8,7 +8,7 @@ defmodule Gannbaruzoi.TasksTest do
 
   describe "query tasks" do
     test "returns all tasks" do
-      task_with_user!
+      task_with_user!()
       {:ok, %{data: %{"tasks" => [task]}}} =
         """
         {
@@ -80,7 +80,7 @@ defmodule Gannbaruzoi.TasksTest do
 
   describe "mutation updateTask" do
     test "updates task with valid args" do
-      task = task_with_user!
+      task = task_with_user!()
 
       {:ok, %{data: %{"updateTask" => %{"task" => task}}}} =
         """
@@ -134,7 +134,7 @@ defmodule Gannbaruzoi.TasksTest do
 
   describe "mutation deleteTask" do
     test "deletes task with valid args" do
-      task = task_with_user!
+      task = task_with_user!()
 
       {:ok, %{data: %{"deleteTask" => %{"id" => actual_id}}}} =
         """
