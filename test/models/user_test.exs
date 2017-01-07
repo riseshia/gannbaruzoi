@@ -32,22 +32,34 @@ defmodule Gannbaruzoi.UserTest do
   describe "create_session/2" do
     test "create auth and tokens" do
       email = "hey-man@gmail.com"
-      user = User.create_session(%User{email: email})
+      %User{email: email} |> Repo.insert!
+      auth = Repo.get_by!(User, email: email)
+             |> User.create_session()
+             |> Repo.update!
+             |> Map.get(:auth)
 
-      assert email == user.auth.uid
-      refute nil == user.auth
+      user = Repo.get_by!(User, email: email)
+
+      assert email == auth.uid
+      refute nil == auth
       assert nil == user.tokens["no-exist"]
-      assert user.auth.token == user.tokens[user.auth.client].token
-      assert 1111 == user.tokens[user.auth.client].expiry
+      assert auth.token == user.tokens[auth.client]["token"]
+      assert 1111 == user.tokens[auth.client]["expiry"]
     end
   end
 
   describe "delete_session/2" do
     test "deletes client" do
-      client = "client-key-as-string"
-      user =
-        %User{tokens: %{ client => %{} }}
-        |> User.delete_session(client)
+      email = "hey-man@gmail.com"
+      %User{email: email} |> Repo.insert!
+      client = Repo.get_by!(User, email: email)
+               |> User.create_session()
+               |> Repo.update!
+               |> Map.get(:auth)
+               |> Map.get(:client)
+      user = Repo.get_by!(User, email: email)
+             |> User.delete_session(client)
+             |> Repo.update!
 
       assert nil == Map.get(user.tokens, client)
     end

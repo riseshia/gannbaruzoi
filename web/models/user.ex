@@ -35,21 +35,21 @@ defmodule Gannbaruzoi.User do
     token = random_string(40)
     client = random_string(40)
 
-    auth = %Auth{uid: user.email, token: token, client: client}
+    auth = %{uid: user.email, token: token, client: client}
 
+    tokens = Map.get(user, :tokens) || %{}
     new_tokens =
-      user
-      |> Map.get(:tokens, %{})
-      |> Map.put(client, %{
-           token: token,
-           expiry: 1111
-         })
-    %__MODULE__{ user | tokens: new_tokens, auth: auth }
+      Map.put(tokens, client, %{
+        token: token,
+        expiry: 1111
+      })
+
+    cast(user, %{tokens: new_tokens, auth: auth }, [:tokens, :auth])
   end
 
   def delete_session(user, client) do
     tokens = Map.delete(user.tokens, client)
-    %__MODULE__{ user | tokens: tokens }
+    cast(user, %{tokens: tokens}, [:tokens])
   end
 
   def match_password?(user, password) do
@@ -66,8 +66,8 @@ defmodule Gannbaruzoi.User do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(user, params \\ %{}) do
+    user
     |> cast(params, [:email])
     |> validate_required([:email])
   end
