@@ -1,5 +1,5 @@
 defmodule Gannbaruzoi.LogsTest do
-  use Gannbaruzoi.ModelCase
+  use Gannbaruzoi.GraphCase
 
   def task! do
     user = insert!(:user)
@@ -11,78 +11,66 @@ defmodule Gannbaruzoi.LogsTest do
   end
 
   describe "mutation createLog" do
-    test "returns new log with valid args" do
-      {:ok, %{data: %{"createLog" => %{"log" => log}}}} =
-        """
-        mutation {
-          createLog(input: {
-            clientMutationId: "1",
-            taskId: #{task!().id}
-          }) {
-            log {
-              id
-              task_id
-            }
+    document(
+      """
+      mutation($clientMutationId: String!, $taskId: ID!) {
+        createLog(input: {
+          clientMutationId: $clientMutationId,
+          taskId: $taskId
+        }) {
+          log {
+            id
+            task_id
           }
         }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w(id task_id)
-      assert expected_keys == Map.keys(log)
+      }
+      """
+    )
+
+    test "returns new log with valid args", %{document: document} do
+      variables = %{"clientMutationId" => "1", "taskId" => task!().id}
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{data: %{"createLog" => %{"log" => log}}}} = result
+      assert ~w(id task_id) == Map.keys(log)
     end
 
-    test "fails to create with invalid args" do
-      {:ok, %{errors: errors}} =
-        """
-        mutation {
-          createLog(input: {
-            clientMutationId: "1"
-            # taskId: some_id <- Required
-          }) {
-            log {
-              id
-              task_id
-            }
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+    test "fails to create with invalid args", %{document: document} do
+      variables = %{"clientMutationId" => "1", "taskId" => nil}
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{errors: errors}} = result
       assert 1 == length(errors)
     end
   end
 
   describe "mutation deleteLog" do
-    test "deletes log with valid args" do
+    document(
+      """
+      mutation($clientMutationId: String!, $taskId: ID!) {
+        deleteLog(input: {
+          clientMutationId: $clientMutationId,
+          taskId: $taskId
+        }) {
+          id
+        }
+      }
+      """
+    )
+
+    test "deletes log with valid args", %{document: document} do
       log = log!()
 
-      {:ok, %{data: %{"deleteLog" => %{"id" => actual_id}}}} =
-        """
-        mutation {
-          deleteLog(input: {
-            clientMutationId: "1",
-            taskId: #{log.task_id}
-          }) {
-            id
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+      variables = %{"clientMutationId" => "1", "taskId" => log.task_id}
+      result = execute_query(document, variables: variables)
+      assert {:ok, %{data: %{"deleteLog" => %{"id" => actual_id}}}} = result
       assert to_string(log.id) == actual_id
     end
 
-    test "fails to delete log with invalid args" do
-      {:ok, %{errors: errors}} =
-        """
-        mutation {
-          deleteLog(input: {
-            clientMutationId: "1"
-            # taskId: some_id <- Required
-          }) {
-            id
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+    test "fails to delete log with invalid args", %{document: document} do
+      variables = %{"clientMutationId" => "1", "taskId" => nil}
+      result = execute_query(document, variables: variables)
+      assert {:ok, %{errors: errors}} = result
       assert 1 == length(errors)
     end
   end

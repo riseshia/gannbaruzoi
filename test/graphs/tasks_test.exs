@@ -1,5 +1,5 @@
 defmodule Gannbaruzoi.TasksTest do
-  use Gannbaruzoi.ModelCase
+  use Gannbaruzoi.GraphCase
 
   def task_with_user! do
     user = insert!(:user)
@@ -7,12 +7,45 @@ defmodule Gannbaruzoi.TasksTest do
   end
 
   describe "query tasks" do
-    test "returns all tasks" do
+    document(
+      """
+      {
+        tasks {
+          id
+          description
+          estimated_size
+          type
+          status
+        }
+      }
+      """
+    )
+
+    test "returns all tasks", %{document: document} do
       task_with_user!()
-      {:ok, %{data: %{"tasks" => [task]}}} =
-        """
-        {
-          tasks {
+      result = execute_query(document)
+
+      assert {:ok, %{data: %{"tasks" => [task]}}} = result
+      assert ~w(description estimated_size id status type) == Map.keys(task)
+    end
+  end
+
+  describe "mutation createTask" do
+    document(
+      """
+      mutation(
+        $clientMutationId: String!,
+        $description: String!,
+        $estimatedSize: Int!,
+        $rootFlg: Boolean!
+      ) {
+        createTask(input: {
+          clientMutationId: $clientMutationId,
+          description: $description,
+          estimatedSize: $estimatedSize,
+          rootFlg: $rootFlg
+        }) {
+          task {
             id
             description
             estimated_size
@@ -20,150 +53,122 @@ defmodule Gannbaruzoi.TasksTest do
             status
           }
         }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w(description estimated_size id status type)
-      assert expected_keys == Map.keys(task)
-    end
-  end
+      }
+      """
+    )
 
-  describe "mutation createTask" do
-    test "returns new task with valid args" do
-      {:ok, %{data: %{"createTask" => %{"task" => task}}}} =
-        """
-        mutation {
-          createTask(input: {
-            clientMutationId: "1",
-            estimatedSize: 1,
-            description: "New Todo",
-            rootFlg: true
-          }) {
-            task {
-              id
-              description
-              estimated_size
-              type
-              status
-            }
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w(description estimated_size id status type)
-      assert expected_keys == Map.keys(task)
+    test "returns new task with valid args", %{document: document} do
+      variables = %{
+        "clientMutationId" => "1",
+        "description" => "New todo",
+        "estimatedSize" => 3,
+        "rootFlg" => true
+      }
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{data: %{"createTask" => %{"task" => task}}}} = result
+      assert ~w(description estimated_size id status type) == Map.keys(task)
     end
 
-    test "fails to create with invalid args" do
-      {:ok, %{errors: errors}} =
-        """
-        mutation {
-          createTask(input: {
-            clientMutationId: "1",
-            estimatedSize: 1,
-            # description: "New Todo", <- Required
-            rootFlg: true
-          }) {
-            task {
-              id
-              description
-              estimated_size
-              type
-              status
-            }
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+    test "fails to create with invalid args", %{document: document} do
+      variables = %{
+        "clientMutationId" => "1",
+        "description" => nil,
+        "estimatedSize" => 3,
+        "rootFlg" => true
+      }
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{errors: errors}} = result
       assert 1 == length(errors)
     end
   end
 
   describe "mutation updateTask" do
-    test "updates task with valid args" do
-      task = task_with_user!()
-
-      {:ok, %{data: %{"updateTask" => %{"task" => task}}}} =
-        """
-        mutation {
-          updateTask(input: {
-            id: #{task.id},
-            clientMutationId: "2",
-            estimatedSize: 2,
-            description: "Updated Todo",
-            rootFlg: true
-          }) {
-            task {
-              id
-              description
-              estimated_size
-              type
-              status
-            }
+    document(
+      """
+      mutation(
+        $clientMutationId: String!,
+        $id: ID!,
+        $description: String,
+        $estimatedSize: Int,
+        $rootFlg: Boolean
+      ) {
+        updateTask(input: {
+          clientMutationId: $clientMutationId,
+          id: $id,
+          estimatedSize: $estimatedSize,
+          description: $description,
+          rootFlg: $rootFlg
+        }) {
+          task {
+            id
+            description
+            estimated_size
+            type
+            status
           }
         }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
-      expected_keys = ~w(description estimated_size id status type)
-      assert expected_keys == Map.keys(task)
+      }
+      """
+    )
+    test "updates task with valid args", %{document: document} do
+      task = task_with_user!()
+      variables = %{
+        "clientMutationId" => "1",
+        "id" => task.id,
+        "description" => "Updated Todo",
+        "estimatedSize" => 2,
+        "rootFlg" => true
+      }
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{data: %{"updateTask" => %{"task" => task}}}} = result
+      assert ~w(description estimated_size id status type) == Map.keys(task)
     end
 
-    test "fails to update task with invalid args" do
-      {:ok, %{errors: errors}} =
-        """
-        mutation {
-          updateTask(input: {
-            clientMutationId: "1",
-            # id: some_id, <- Required
-            estimatedSize: 1,
-            rootFlg: true
-          }) {
-            task {
-              id
-              description
-              estimated_size
-              type
-              status
-            }
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+    test "fails to update task with invalid args", %{document: document} do
+      variables = %{
+        "clientMutationId" => "1",
+        "id" => nil,
+        "description" => "Updated Todo",
+        "estimatedSize" => 2,
+        "rootFlg" => true
+      }
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{errors: errors}} = result
       assert 1 == length(errors)
     end
   end
 
   describe "mutation deleteTask" do
-    test "deletes task with valid args" do
-      task = task_with_user!()
-
-      {:ok, %{data: %{"deleteTask" => %{"id" => actual_id}}}} =
-        """
-        mutation {
-          deleteTask(input: {
-            clientMutationId: "1",
-            id: #{task.id}
-          }) {
-            id
-          }
+    document(
+      """
+      mutation($clientMutationId: String!, $id: ID!) {
+        deleteTask(input: {
+          clientMutationId: $clientMutationId,
+          id: $id
+        }) {
+          id
         }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+      }
+      """
+    )
+    test "deletes task with valid args", %{document: document} do
+      task = task_with_user!()
+      variables = %{"clientMutationId" => "1", "id" => task.id}
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{data: %{"deleteTask" => %{"id" => actual_id}}}} = result
       assert to_string(task.id) == actual_id
     end
 
-    test "fails to delete task with invalid args" do
-      {:ok, %{errors: errors}} =
-        """
-        mutation {
-          deleteTask(input: {
-            clientMutationId: "1"
-            # id: some_id <- Required
-          }) {
-            id
-          }
-        }
-        """
-        |> Absinthe.run(Gannbaruzoi.Schema)
+    test "fails to delete task with invalid args", %{document: document} do
+      variables = %{"clientMutationId" => "1", "id" => nil}
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{errors: errors}} = result
       assert 1 == length(errors)
     end
   end
