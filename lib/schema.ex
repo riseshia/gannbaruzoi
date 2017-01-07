@@ -8,6 +8,7 @@ defmodule Gannbaruzoi.Schema do
 
   alias Gannbaruzoi.LogResolver
   alias Gannbaruzoi.TaskResolver
+  alias Gannbaruzoi.AuthResolver
 
   import_types Gannbaruzoi.Types
 
@@ -19,6 +20,29 @@ defmodule Gannbaruzoi.Schema do
   end
 
   mutation do
+    @desc "Create new session"
+    payload field :create_session do
+      input do
+        field :email, non_null(:string)
+        field :password, non_null(:string)
+      end
+      output do
+        field :auth, :auth
+      end
+      resolve &AuthResolver.create/2
+    end
+
+    @desc "Destroy current session"
+    payload field :destroy_session do
+      input do
+        field :client, non_null(:string)
+      end
+      output do
+        field :result, non_null(:string)
+      end
+      resolve &AuthResolver.delete/2
+    end
+
     @desc "Create new task"
     payload field :create_task do
       input do
