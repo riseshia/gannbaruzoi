@@ -1,11 +1,10 @@
-defmodule Gannbaruzoi.ConnCase do
+defmodule Gannbaruzoi.GraphCase do
   @moduledoc """
   This module defines the test case to be used by
-  tests that require setting up a connection.
+  graph tests.
 
-  Such tests rely on `Phoenix.ConnTest` and also
-  import other functionality to make it easier
-  to build and query models.
+  You may define functions here to be used as helpers in
+  your graph tests. See `errors_on/2`'s definition as reference.
 
   Finally, if the test case interacts with the database,
   it cannot be async. For this reason, every test runs
@@ -17,19 +16,12 @@ defmodule Gannbaruzoi.ConnCase do
 
   using do
     quote do
-      # Import conveniences for testing with connections
-      use Phoenix.ConnTest
-
-      alias Gannbaruzoi.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-
-      import Gannbaruzoi.Router.Helpers
+      import Gannbaruzoi.ModelCase
       import Gannbaruzoi.Factory
-
-      # The default endpoint for testing
-      @endpoint Gannbaruzoi.Endpoint
+      import Gannbaruzoi.QueryHelper
     end
   end
 
@@ -40,6 +32,7 @@ defmodule Gannbaruzoi.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    :ok
   end
 end
+
