@@ -12,8 +12,8 @@ defmodule Gannbaruzoi.User do
     field :email, :string
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
-    field :encrypted_password, :string, virtual: true # TODO: get real
-    field :tokens, :map, virtual: true, default: %{} # TODO: get real
+    field :encrypted_password, :string
+    field :tokens, :map
     field :auth, :map, virtual: true, default: %{}
 
     timestamps()
