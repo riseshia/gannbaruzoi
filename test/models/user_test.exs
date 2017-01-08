@@ -2,6 +2,7 @@ defmodule Gannbaruzoi.UserTest do
   use Gannbaruzoi.ModelCase
 
   alias Gannbaruzoi.User
+  import Gannbaruzoi.Factory
 
   @valid_attrs %{email: "some content"}
   @invalid_attrs %{}
@@ -23,7 +24,7 @@ defmodule Gannbaruzoi.UserTest do
   describe "find_or_create_dummy/0" do
     test "find registered user" do
       expected_email = "exist@email.com"
-      %User{email: expected_email} |> Repo.insert!
+      insert!(:user, email: expected_email)
       user = User.find_or_create_dummy
       assert expected_email == user.email
     end
@@ -36,7 +37,7 @@ defmodule Gannbaruzoi.UserTest do
   describe "build_session/2" do
     test "create auth and tokens" do
       email = "hey-man@gmail.com"
-      %User{email: email} |> Repo.insert!
+      insert!(:user, email: email)
       auth = Repo.get_by!(User, email: email)
              |> User.build_session()
              |> Repo.update!
@@ -47,15 +48,14 @@ defmodule Gannbaruzoi.UserTest do
       refute nil == auth
       assert email == auth.uid
       assert nil == user.tokens["no-exist"]
-      assert auth.token == user.tokens[auth.client]["token"]
-      assert 1111 == user.tokens[auth.client]["expiry"]
+      refute nil == user.tokens[auth.client]
     end
   end
 
   describe "delete_session/2" do
     test "deletes client" do
       email = "hey-man@gmail.com"
-      %User{email: email} |> Repo.insert!
+      insert!(:user, email: email)
       client = Repo.get_by!(User, email: email)
                |> User.build_session()
                |> Repo.update!
@@ -69,12 +69,37 @@ defmodule Gannbaruzoi.UserTest do
     end
   end
 
+  describe "valid_token?" do
+    test "returns true or false" do
+      email = "hey-man@gmail.com"
+      insert!(:user, email: email)
+      auth = Repo.get_by!(User, email: email)
+             |> User.build_session()
+             |> Repo.update!
+             |> Map.get(:auth)
+
+      user = Repo.get_by!(User, email: email)
+      now = DateTime.utc_now() |> DateTime.to_unix()
+      fifteen_days_later = now + 60 * 60 * 24 * 14
+
+      assert User.valid_token?(user, auth.client, auth.token)
+      refute User.valid_token?(user, "wrong client", auth.token)
+      refute User.valid_token?(user, auth.client, "worng token")
+      refute User.valid_token?(user, auth.client, auth.token,
+                               fifteen_days_later)
+    end
+  end
+
   describe "match_password?/2" do
-    test "deletes client" do
+    test "returns true or false" do
       password = "alice1234"
-      user = insert_user(email: "hey@gmail.com", password: password)
+      email = "hey!@gmail.com"
+      %User{}
+      |> User.changeset(%{email: email, password: password})
+      |> Repo.insert!
+      user = Repo.get_by!(User, email: email)
       assert User.match_password?(user, password)
-      # refute User.match_password?(user, "worng-password")
+      refute User.match_password?(user, "worng-password")
     end
   end
 end

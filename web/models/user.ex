@@ -10,7 +10,6 @@ defmodule Gannbaruzoi.User do
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
-    field :password_confirmation, :string, virtual: true
     field :encrypted_password, :string
     field :tokens, :map
     field :auth, :map, virtual: true, default: %{}
@@ -37,10 +36,13 @@ defmodule Gannbaruzoi.User do
     auth = %{uid: user.email, token: token, client: client}
 
     tokens = Map.get(user, :tokens) || %{}
+    now = DateTime.utc_now() |> DateTime.to_unix()
+    expiry = now + 60 * 60 * 24 * 14
+
     new_tokens =
       Map.put(tokens, client, %{
-        token: token,
-        expiry: 1111
+        token: Comeonin.Bcrypt.hashpwsalt(token),
+        expiry: expiry
       })
 
     cast(user, %{tokens: new_tokens, auth: auth}, [:tokens, :auth])
@@ -51,8 +53,15 @@ defmodule Gannbaruzoi.User do
     cast(user, %{tokens: tokens}, [:tokens])
   end
 
+  def valid_token?(user, client, token,
+                   now \\ DateTime.utc_now() |> DateTime.to_unix()) do
+    tokens = user.tokens[client]
+    tokens && Comeonin.Bcrypt.checkpw(token, tokens["token"]) &&
+      now < tokens["expiry"]
+  end
+
   def match_password?(user, password) do
-    true
+    Comeonin.Bcrypt.checkpw(password, user.encrypted_password)
   end
 
   defp random_string(length) do
@@ -69,5 +78,17 @@ defmodule Gannbaruzoi.User do
     user
     |> cast(params, [:email])
     |> validate_required([:email])
+    |> cast(params, [:password])
+    |> validate_length(:password, min: 6, max: 100)
+    |> put_pass_hash()
+  end
+
+  defp put_pass_hash(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
+         put_change(changeset, :encrypted_password, Comeonin.Bcrypt.hashpwsalt(pass))
+      _ ->
+         changeset
+    end
   end
 end
