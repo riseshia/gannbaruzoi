@@ -23,8 +23,9 @@ defmodule Gannbaruzoi.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Gannbaruzoi, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :absinthe_relay]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
+                    :gettext, :phoenix_ecto, :postgrex, :absinthe_relay,
+                    :comeonin]]
   end
 
   # Specifies which paths to compile per environment.
@@ -46,6 +47,7 @@ defmodule Gannbaruzoi.Mixfile do
      {:absinthe_plug, "~> 1.1"},
      {:absinthe_relay, "~> 1.1"},
      {:poison, "~> 2.2"},
+     {:comeonin, "~> 3.0"},
      {:credo, "~> 0.5", only: [:dev, :test]}
    ]
   end
