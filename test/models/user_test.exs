@@ -34,49 +34,37 @@ defmodule Gannbaruzoi.UserTest do
     end
   end
 
+
   describe "build_session/2" do
     test "create auth and tokens" do
       email = "hey-man@gmail.com"
-      insert!(:user, email: email)
-      auth = Repo.get_by!(User, email: email)
-             |> User.build_session()
-             |> Repo.update!
-             |> Map.get(:auth)
-
+      auth = generate_auth(email)
       user = Repo.get_by!(User, email: email)
 
-      refute nil == auth
+      assert auth
       assert email == auth.uid
-      assert nil == user.tokens["no-exist"]
-      refute nil == user.tokens[auth.client]
+      assert user.tokens[auth.client]
+      refute user.tokens["no-exist"]
     end
   end
 
   describe "delete_session/2" do
     test "deletes client" do
       email = "hey-man@gmail.com"
-      insert!(:user, email: email)
-      client = Repo.get_by!(User, email: email)
-               |> User.build_session()
-               |> Repo.update!
-               |> Map.get(:auth)
-               |> Map.get(:client)
+      auth = generate_auth(email)
+      client = auth.client
       user = Repo.get_by!(User, email: email)
              |> User.delete_session(client)
              |> Repo.update!
 
-      assert nil == Map.get(user.tokens, client)
+      refute Map.get(user.tokens, client)
     end
   end
 
   describe "valid_token?" do
     test "returns true or false" do
       email = "hey-man@gmail.com"
-      insert!(:user, email: email)
-      auth = Repo.get_by!(User, email: email)
-             |> User.build_session()
-             |> Repo.update!
-             |> Map.get(:auth)
+      auth = generate_auth(email)
 
       user = Repo.get_by!(User, email: email)
       now = DateTime.utc_now() |> DateTime.to_unix()
@@ -84,7 +72,7 @@ defmodule Gannbaruzoi.UserTest do
 
       assert User.valid_token?(user, auth.client, auth.token)
       refute User.valid_token?(user, "wrong client", auth.token)
-      refute User.valid_token?(user, auth.client, "worng token")
+      refute User.valid_token?(user, auth.client, "wrong token")
       refute User.valid_token?(user, auth.client, auth.token,
                                fifteen_days_later)
     end
@@ -99,7 +87,15 @@ defmodule Gannbaruzoi.UserTest do
       |> Repo.insert!
       user = Repo.get_by!(User, email: email)
       assert User.match_password?(user, password)
-      refute User.match_password?(user, "worng-password")
+      refute User.match_password?(user, "wrong-password")
     end
+  end
+
+  defp generate_auth(email) do
+    insert!(:user, email: email)
+    Repo.get_by!(User, email: email)
+    |> User.build_session()
+    |> Repo.update!
+    |> Map.get(:auth)
   end
 end
