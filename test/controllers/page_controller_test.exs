@@ -9,6 +9,6 @@ defmodule Gannbaruzoi.PageControllerTest do
   test "GET /schema", %{conn: conn} do
     conn = get conn, "/schema"
     response = json_response(conn, 200)
-    assert response["data"]["schema"]
+    assert response["data"]["__schema"]
   end
 end

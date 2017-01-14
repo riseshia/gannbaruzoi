@@ -10,12 +10,18 @@ defmodule Gannbaruzoi.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      aliases: aliases(),
-     deps: deps()]
+     deps: deps(),
+     test_coverage: [tool: ExCoveralls]
+   ]
   end
 
   def preferred_cli_env do
     ["t": :test,
-     "test.setup": :test]
+     "test.setup": :test,
+     "coveralls": :test,
+     "coveralls.detail": :test,
+     "coveralls.post": :test,
+     "coveralls.html": :test]
   end
 
   # Configuration for the OTP application.
@@ -48,7 +54,8 @@ defmodule Gannbaruzoi.Mixfile do
      {:absinthe_relay, "~> 1.1"},
      {:poison, "~> 2.2"},
      {:comeonin, "~> 3.0"},
-     {:credo, "~> 0.5", only: [:dev, :test]}
+     {:credo, "~> 0.5", only: [:dev, :test]},
+     {:excoveralls, "~> 0.5", only: :test}
    ]
   end
 
@@ -61,6 +68,7 @@ defmodule Gannbaruzoi.Mixfile do
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
      "ecto.reset": ["ecto.drop", "ecto.setup"],
+     "test.setup": "ecto.create",
      "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 end
