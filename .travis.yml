@@ -1,0 +1,18 @@
+language: elixir
+dist: trusty
+sudo: false
+elixir:
+  - 1.4.0
+otp_release:
+  - 19.1
+addons:
+    postgresql: "9.6"
+services:
+  - postgresql
+env:
+  - MIX_ENV=test
+before_install:
+  - cp config/test.travis.exs config/test.secret.exs
+before_script:
+  - mix test.setup
+script: mix coveralls.travis

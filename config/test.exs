@@ -10,11 +10,5 @@ config :gannbaruzoi, Gannbaruzoi.Endpoint,
 config :logger, level: :warn
 
 config :comeonin, :bcrypt_log_rounds, 4
-# Configure your database
-config :gannbaruzoi, Gannbaruzoi.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "gannbaruzoi_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+
+import_config "test.secret.exs"
