@@ -4,8 +4,7 @@ defmodule Gannbaruzoi.User do
   """
 
   use Gannbaruzoi.Web, :model
-  alias Gannbaruzoi.User
-  alias Gannbaruzoi.Repo
+  alias Gannbaruzoi.{Repo, User}
 
   schema "users" do
     field :email, :string
