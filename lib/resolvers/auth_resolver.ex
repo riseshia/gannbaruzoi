@@ -7,7 +7,7 @@ defmodule Gannbaruzoi.AuthResolver do
 
   def create(input, _info) do
     user = Repo.get_by(User, email: input.email)
-    if User.match_password?(user, input.password) do
+    if user && User.match_password?(user, input.password) do
       case Repo.update(User.build_session(user)) do
         {:ok, user} -> {:ok, %{auth: user.auth}}
         {:error, changeset} -> {:error, changeset.errors}
@@ -18,10 +18,13 @@ defmodule Gannbaruzoi.AuthResolver do
   end
 
   def delete(%{client: client}, info) do
-    user = User.delete_session(info.current_user, client)
-    case Repo.update(user) do
-      {:ok, _} -> {:ok, %{result: "ok"}}
-      {:error, changeset} -> {:error, changeset.errors}
+    with true <- Map.has_key?(info.context, :current_user) &&
+                 Map.has_key?(info.context.current_user.tokens, client),
+         user <- User.delete_session(info.context.current_user, client),
+         {:ok, _} <- Repo.update(user) do
+      {:ok, %{result: "ok"}}
+    else
+      _ -> {:error, "fail to logout"}
     end
   end
 end

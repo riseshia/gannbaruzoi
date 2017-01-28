@@ -13,7 +13,15 @@ defmodule Gannbaruzoi.Router do
     plug :accepts, ["json"]
   end
 
-  forward "/api", Absinthe.Plug, schema: Gannbaruzoi.Schema
+  pipeline :graphql do
+    plug Gannbaruzoi.Context
+  end
+
+  scope "/api" do
+    pipe_through :graphql
+    forward "/", Absinthe.Plug, schema: Gannbaruzoi.Schema
+  end
+
   forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Gannbaruzoi.Schema
 
   scope "/", Gannbaruzoi do

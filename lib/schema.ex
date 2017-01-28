@@ -32,8 +32,8 @@ defmodule Gannbaruzoi.Schema do
       resolve &AuthResolver.create/2
     end
 
-    @desc "Destroy current session"
-    payload field :destroy_session do
+    @desc "Delete session"
+    payload field :delete_session do
       input do
         field :client, non_null(:string)
       end
