@@ -5,8 +5,12 @@ elixir:
   - 1.4.0
 otp_release:
   - 19.1
+cache:
+  directories:
+    - _build
+    - deps
 addons:
-    postgresql: "9.6"
+  postgresql: "9.6"
 services:
   - postgresql
 env:
