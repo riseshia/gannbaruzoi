@@ -10,6 +10,7 @@ defmodule Gannbaruzoi.Types do
     field :description, :string
     field :estimated_size, :integer
     field :type, :string
+    field :parent_id, :id
     field :status, :boolean
   end
 
