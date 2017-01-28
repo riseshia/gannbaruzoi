@@ -15,6 +15,7 @@ defmodule Gannbaruzoi.TasksTest do
           description
           estimated_size
           type
+          parent_id
           status
         }
       }
@@ -26,7 +27,8 @@ defmodule Gannbaruzoi.TasksTest do
       result = execute_query(document)
 
       assert {:ok, %{data: %{"tasks" => [task]}}} = result
-      assert ~w(description estimated_size id status type) == Map.keys(task)
+      assert ~w(description estimated_size id parent_id status type) ==
+             Map.keys(task)
     end
   end
 
@@ -37,19 +39,20 @@ defmodule Gannbaruzoi.TasksTest do
         $clientMutationId: String!,
         $description: String!,
         $estimatedSize: Int!,
-        $rootFlg: Boolean!
+        $parentId: ID
       ) {
         createTask(input: {
           clientMutationId: $clientMutationId,
           description: $description,
           estimatedSize: $estimatedSize,
-          rootFlg: $rootFlg
+          parentId: $parentId
         }) {
           task {
             id
             description
             estimated_size
             type
+            parent_id
             status
           }
         }
@@ -61,21 +64,34 @@ defmodule Gannbaruzoi.TasksTest do
       variables = %{
         "clientMutationId" => "1",
         "description" => "New todo",
-        "estimatedSize" => 3,
-        "rootFlg" => true
+        "estimatedSize" => 3
       }
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{data: %{"createTask" => %{"task" => task}}}} = result
-      assert ~w(description estimated_size id status type) == Map.keys(task)
+      assert ~w(description estimated_size id parent_id status type) ==
+             Map.keys(task)
+    end
+
+    test "returns new subtask with valid args", %{document: document} do
+      task = insert!(:task)
+      variables = %{
+        "clientMutationId" => "1",
+        "description" => "New todo",
+        "estimatedSize" => 3,
+        "parentId" => task.id
+      }
+      result = execute_query(document, variables: variables)
+
+      assert {:ok, %{data: %{"createTask" => %{"task" => task}}}} = result
+      assert ~w(description estimated_size id parent_id status type) ==
+             Map.keys(task)
     end
 
     test "fails to create with invalid args", %{document: document} do
       variables = %{
         "clientMutationId" => "1",
-        "description" => nil,
-        "estimatedSize" => 3,
-        "rootFlg" => true
+        "description" => nil
       }
       result = execute_query(document, variables: variables)
 
@@ -91,21 +107,20 @@ defmodule Gannbaruzoi.TasksTest do
         $clientMutationId: String!,
         $id: ID!,
         $description: String,
-        $estimatedSize: Int,
-        $rootFlg: Boolean
+        $estimatedSize: Int
       ) {
         updateTask(input: {
           clientMutationId: $clientMutationId,
           id: $id,
           estimatedSize: $estimatedSize,
-          description: $description,
-          rootFlg: $rootFlg
+          description: $description
         }) {
           task {
             id
             description
             estimated_size
             type
+            parent_id
             status
           }
         }
@@ -118,13 +133,13 @@ defmodule Gannbaruzoi.TasksTest do
         "clientMutationId" => "1",
         "id" => task.id,
         "description" => "Updated Todo",
-        "estimatedSize" => 2,
-        "rootFlg" => true
+        "estimatedSize" => 2
       }
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{data: %{"updateTask" => %{"task" => task}}}} = result
-      assert ~w(description estimated_size id status type) == Map.keys(task)
+      assert ~w(description estimated_size id parent_id status type) ==
+             Map.keys(task)
     end
 
     test "fails to update task with invalid args", %{document: document} do
@@ -132,8 +147,7 @@ defmodule Gannbaruzoi.TasksTest do
         "clientMutationId" => "1",
         "id" => nil,
         "description" => "Updated Todo",
-        "estimatedSize" => 2,
-        "rootFlg" => true
+        "estimatedSize" => 2
       }
       result = execute_query(document, variables: variables)
 
