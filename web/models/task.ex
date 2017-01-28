@@ -41,18 +41,18 @@ defmodule Gannbaruzoi.Task do
   defp validate_parent_id(changeset) do
     if Map.has_key?(changeset.changes, :user_id) do
       user_id = changeset.changes.user_id
-      validate_change(changeset, :parent_id, fn :parent_id, pid ->
-        p_task = Repo.get(Task, pid)
-        if p_task do
-          if p_task.user_id == user_id do
-            []
-          else
-            [parent_id: "should be yours"]
-          end
+      vpid = fn :parent_id, pid ->
+        with p_task <- Repo.get(Task, pid),
+             true <- p_task.user_id == user_id do
+          []
         else
-          [parent_id: "is not found"]
+          false -> [parent_id: "should be yours"]
+          nil -> [parent_id: "is not found"]
+          _ -> raise "unhundled"
         end
-      end)
+      end
+
+      validate_change(changeset, :parent_id, vpid)
     else
       changeset
     end
