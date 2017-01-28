@@ -26,14 +26,15 @@ defmodule Gannbaruzoi.Context do
   Return the current user context based on the authorization header
   """
   def build_context(conn) do
-    with uid <- get_req_header(conn, "UID"),
-         client <- get_req_header(conn, "Client"),
-         access_token <- get_req_header(conn, "Access-Token"),
+    with [uid] <- get_req_header(conn, "uid"),
+         [client] <- get_req_header(conn, "client"),
+         [access_token] <- get_req_header(conn, "access-token"),
          current_user <- Repo.get_by(User, email: uid),
-         true <- User.valid_token?(current_user, client, access_token) do
+         true <- current_user &&
+                 User.valid_token?(current_user, client, access_token) do
       {:ok, %{current_user: current_user}}
     else
-      nil -> {:ok, %{}}
+      [] -> {:ok, %{}}
       _ -> {:error, "Invalid Auth"}
     end
   end
