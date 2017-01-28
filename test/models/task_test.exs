@@ -24,7 +24,7 @@ defmodule Gannbaruzoi.TaskTest do
       Task.changeset(%Task{}, @valid_attrs_with_parent)
       |> Task.insert!
 
-    refute task.type == "root"
+    assert "branch" = task.type
   end
 
   test "type will be root unless it have parent" do
@@ -32,15 +32,7 @@ defmodule Gannbaruzoi.TaskTest do
       Task.changeset(%Task{}, @valid_attrs)
       |> Task.insert!
 
-    assert task.type == "root"
-  end
-
-  test "changeset with not exist is invalid" do
-    @invalid_parent_attrs =
-      %{@valid_attrs | parent_id: 0, user_id: parent.user_id + 1}
-    changeset = Task.changeset(%Task{}, @invalid_parent_attrs)
-
-    refute changeset.valid?
+    assert "root" = task.type
   end
 
   test "changeset with different user's parent task is invalid" do
