@@ -24,7 +24,6 @@ defmodule Gannbaruzoi.ContextTest do
   test "current_user is assigned when invalid header" do
     generate_user()
     auth = generate_auth()
-    user = Repo.get_by!(User, email: @email)
     conn =
       build_conn()
       |> put_req_header("uid", "aaaa")
