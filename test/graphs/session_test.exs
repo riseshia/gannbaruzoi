@@ -115,7 +115,6 @@ defmodule Gannbaruzoi.AuthTest do
 
     test "fails to delete token when not login", %{document: document} do
       generate_user()
-      user = Repo.get_by!(User, email: @email)
       variables = %{
         "clientMutationId" => "1",
         "client" => "invalid",
