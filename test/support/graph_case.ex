@@ -34,5 +34,14 @@ defmodule Gannbaruzoi.GraphCase do
 
     :ok
   end
+
+  setup config do
+    if email = config[:login_as] do
+      user = Gannbaruzoi.Repo.insert!(%Gannbaruzoi.User{email: email})
+      Map.put(config, :user, user)
+    else
+      config
+    end
+  end
 end
 

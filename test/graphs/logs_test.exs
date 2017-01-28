@@ -1,15 +1,6 @@
 defmodule Gannbaruzoi.LogsTest do
   use Gannbaruzoi.GraphCase
 
-  def task! do
-    user = insert!(:user)
-    insert!(:task, user: user)
-  end
-
-  def log! do
-    insert!(:log, task_id: task!().id)
-  end
-
   describe "mutation createLog" do
     document(
       """
@@ -27,14 +18,17 @@ defmodule Gannbaruzoi.LogsTest do
       """
     )
 
-    test "returns new log with valid args", %{document: document} do
-      variables = %{"clientMutationId" => "1", "taskId" => task!().id}
+    @tag login_as: "user@email.com"
+    test "returns new log with valid args", %{document: document, user: user} do
+      task = insert!(:task, user: user)
+      variables = %{"clientMutationId" => "1", "taskId" => task.id}
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{data: %{"createLog" => %{"log" => log}}}} = result
       assert ~w(id task_id) == Map.keys(log)
     end
 
+    @tag login_as: "user@email.com"
     test "fails to create with invalid args", %{document: document} do
       variables = %{"clientMutationId" => "1", "taskId" => nil}
       result = execute_query(document, variables: variables)
@@ -58,8 +52,10 @@ defmodule Gannbaruzoi.LogsTest do
       """
     )
 
-    test "deletes log with valid args", %{document: document} do
-      log = log!()
+    @tag login_as: "user@email.com"
+    test "deletes log with valid args", %{document: document, user: user} do
+      task = insert!(:task, user: user)
+      log = insert!(:log, task_id: task.id)
 
       variables = %{"clientMutationId" => "1", "taskId" => log.task_id}
       result = execute_query(document, variables: variables)
@@ -67,6 +63,7 @@ defmodule Gannbaruzoi.LogsTest do
       assert to_string(log.id) == actual_id
     end
 
+    @tag login_as: "user@email.com"
     test "fails to delete log with invalid args", %{document: document} do
       variables = %{"clientMutationId" => "1", "taskId" => nil}
       result = execute_query(document, variables: variables)

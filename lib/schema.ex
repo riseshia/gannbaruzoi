@@ -48,7 +48,7 @@ defmodule Gannbaruzoi.Schema do
       input do
         field :estimated_size, non_null(:integer)
         field :description, non_null(:string)
-        field :parent_id, :boolean
+        field :parent_id, :id
       end
       output do
         field :task, :task
