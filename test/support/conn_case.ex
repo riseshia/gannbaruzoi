@@ -15,18 +15,16 @@ defmodule Gannbaruzoi.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Gannbaruzoi.Repo
   using do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
 
-      alias Gannbaruzoi.Repo
       import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
+      import Ecto.{Changeset, Query}
 
-      import Gannbaruzoi.Router.Helpers
-      import Gannbaruzoi.Factory
+      import Gannbaruzoi.{Router.Helpers, Factory}
 
       # The default endpoint for testing
       @endpoint Gannbaruzoi.Endpoint
@@ -34,10 +32,10 @@ defmodule Gannbaruzoi.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gannbaruzoi.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

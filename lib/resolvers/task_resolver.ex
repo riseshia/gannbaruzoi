@@ -2,8 +2,7 @@ defmodule Gannbaruzoi.TaskResolver do
   @moduledoc """
   The resolvers of task
   """
-  alias Gannbaruzoi.Repo
-  alias Gannbaruzoi.Task
+  alias Gannbaruzoi.{Repo, Task}
   alias Absinthe.Relay.Connection
 
   def all(pagination_args, _) do

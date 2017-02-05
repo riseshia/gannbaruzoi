@@ -6,11 +6,9 @@ defmodule Gannbaruzoi.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema
 
-  alias Gannbaruzoi.LogResolver
-  alias Gannbaruzoi.TaskResolver
-  alias Gannbaruzoi.AuthResolver
+  alias Gannbaruzoi.{LogResolver, TaskResolver, AuthResolver, Types}
 
-  import_types Gannbaruzoi.Types
+  import_types Types
 
   query do
     @desc "Get all tasks of current user"

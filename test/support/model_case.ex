@@ -14,23 +14,23 @@ defmodule Gannbaruzoi.ModelCase do
 
   use ExUnit.CaseTemplate
 
+  alias Gannbaruzoi.{Repo, ErrorHelpers}
+
   using do
     quote do
       alias Gannbaruzoi.Repo
 
       import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
-      import Gannbaruzoi.ModelCase
-      import Gannbaruzoi.Factory
+      import Ecto.{Changeset, Query}
+      import Gannbaruzoi.{ModelCase, Factory}
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gannbaruzoi.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     end
 
     :ok
@@ -60,7 +60,7 @@ defmodule Gannbaruzoi.ModelCase do
   """
   def errors_on(struct, data) do
     struct.__struct__.changeset(struct, data)
-    |> Ecto.Changeset.traverse_errors(&Gannbaruzoi.ErrorHelpers.translate_error/1)
+    |> Ecto.Changeset.traverse_errors(&ErrorHelpers.translate_error/1)
     |> Enum.flat_map(fn {key, errors} -> for msg <- errors, do: {key, msg} end)
   end
 end

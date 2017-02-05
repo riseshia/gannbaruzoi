@@ -2,8 +2,7 @@ defmodule Gannbaruzoi.AuthResolver do
   @moduledoc """
   The resolvers of auth
   """
-  alias Gannbaruzoi.Repo
-  alias Gannbaruzoi.User
+  alias Gannbaruzoi.{Repo, User}
 
   def create(input, _info) do
     user = Repo.get_by(User, email: input.email)

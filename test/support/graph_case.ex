@@ -14,22 +14,22 @@ defmodule Gannbaruzoi.GraphCase do
 
   use ExUnit.CaseTemplate
 
+  alias Gannbaruzoi.{Repo, Factory}
+
   using do
     quote do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Gannbaruzoi.ModelCase
-      import Gannbaruzoi.Factory
-      import Gannbaruzoi.QueryHelper
+      import Gannbaruzoi.{ModelCase, Factory, QueryHelper}
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gannbaruzoi.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Gannbaruzoi.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     end
 
     :ok
@@ -37,7 +37,7 @@ defmodule Gannbaruzoi.GraphCase do
 
   setup config do
     if email = config[:login_as] do
-      user = Gannbaruzoi.Repo.insert!(%Gannbaruzoi.User{email: email})
+      user = Factory.insert!(:user, %{email: email})
       Map.put(config, :user, user)
     else
       config

@@ -1,8 +1,7 @@
 defmodule Gannbaruzoi.LogTest do
   use Gannbaruzoi.ModelCase
 
-  alias Gannbaruzoi.Log
-  alias Gannbaruzoi.Repo
+  alias Gannbaruzoi.{Repo, Log}
 
   @valid_attrs %{}
 
