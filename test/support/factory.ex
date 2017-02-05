@@ -6,7 +6,7 @@ defmodule Gannbaruzoi.Factory do
   end
 
   def build(:task) do
-    %Task{ description: "Default Todo", estimated_size: 1 }
+    %Task{description: "Default Todo", estimated_size: 1, type: "root"}
   end
 
   def build(:log) do

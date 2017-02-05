@@ -32,7 +32,7 @@ defmodule Gannbaruzoi.User do
     token = random_string(40)
     client = random_string(40)
 
-    auth = %{uid: user.email, token: token, client: client}
+    auth = %{uid: user.email, access_token: token, client: client}
 
     tokens = Map.get(user, :tokens) || %{}
     now = DateTime.utc_now() |> DateTime.to_unix()

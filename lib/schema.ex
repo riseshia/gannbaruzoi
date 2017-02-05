@@ -25,7 +25,7 @@ defmodule Gannbaruzoi.Schema do
         field :password, non_null(:string)
       end
       output do
-        field :auth, :auth
+        field :auth, non_null(:auth)
       end
       resolve &AuthResolver.create/2
     end
@@ -49,7 +49,7 @@ defmodule Gannbaruzoi.Schema do
         field :parent_id, :id
       end
       output do
-        field :task, :task
+        field :task, non_null(:task)
       end
       resolve &TaskResolver.create/3
     end
@@ -63,7 +63,7 @@ defmodule Gannbaruzoi.Schema do
         field :done_flg, :boolean
       end
       output do
-        field :task, :task
+        field :task, non_null(:task)
       end
       resolve &TaskResolver.update/3
     end
@@ -74,7 +74,7 @@ defmodule Gannbaruzoi.Schema do
         field :id, non_null(:id)
       end
       output do
-        field :id, :id
+        field :id, non_null(:id)
       end
       resolve &TaskResolver.delete/3
     end
@@ -85,7 +85,7 @@ defmodule Gannbaruzoi.Schema do
         field :task_id, non_null(:id)
       end
       output do
-        field :log, :log
+        field :log, non_null(:log)
       end
       resolve &LogResolver.create/2
     end
@@ -96,7 +96,7 @@ defmodule Gannbaruzoi.Schema do
         field :task_id, non_null(:id)
       end
       output do
-        field :id, :id
+        field :id, non_null(:id)
       end
       resolve &LogResolver.delete/2
     end
