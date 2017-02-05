@@ -7,12 +7,12 @@ defmodule Gannbaruzoi.Types do
 
   @desc "A task"
   object :task do
-    field :id, :id
-    field :description, :string
-    field :estimated_size, :integer
-    field :type, :string
+    field :id, non_null(:id)
+    field :description, non_null(:string)
+    field :estimated_size, non_null(:integer)
+    field :type, non_null(:string)
     field :parent_id, :id
-    field :status, :boolean
+    field :status, non_null(:boolean)
   end
 
   @desc "Connection of Tasks"
@@ -20,14 +20,14 @@ defmodule Gannbaruzoi.Types do
 
   @desc "A log"
   object :log do
-    field :id, :id
-    field :task_id, :id
+    field :id, non_null(:integer)
+    field :task_id, non_null(:integer)
   end
 
   @desc "An auth"
   object :auth do
-    field :uid, :string
-    field :client, :string
-    field :access_token, :string
+    field :uid, non_null(:id)
+    field :client, non_null(:string)
+    field :access_token, non_null(:string)
   end
 end

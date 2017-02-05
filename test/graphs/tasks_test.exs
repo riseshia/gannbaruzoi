@@ -11,9 +11,9 @@ defmodule Gannbaruzoi.TasksTest do
             node {
               id
               description
-              estimated_size
+              estimatedSize
               type
-              parent_id
+              parentId
               status
             }
           }
@@ -32,7 +32,7 @@ defmodule Gannbaruzoi.TasksTest do
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
              result
-      assert ~w(description estimated_size id parent_id status type) ==
+      assert ~w(description estimatedSize id parentId status type) ==
              Map.keys(task)
     end
   end

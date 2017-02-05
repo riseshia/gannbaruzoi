@@ -20,7 +20,7 @@ defmodule Gannbaruzoi.AuthTest do
           auth {
             uid
             client
-            access_token
+            accessToken
           }
         }
       }
@@ -37,7 +37,7 @@ defmodule Gannbaruzoi.AuthTest do
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{data: %{"createSession" => %{"auth" => auth}}}} = result
-      assert ~w(access_token client uid) == Map.keys(auth)
+      assert ~w(accessToken client uid) == Map.keys(auth)
     end
 
     test "fails to create with invalid email", %{document: document} do

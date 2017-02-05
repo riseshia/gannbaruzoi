@@ -14,7 +14,7 @@ defmodule Gannbaruzoi.ContextTest do
       build_conn()
       |> put_req_header("uid", auth.uid)
       |> put_req_header("client", auth.client)
-      |> put_req_header("access-token", auth.token)
+      |> put_req_header("access-token", auth.access_token)
       |> Context.call(%{})
 
     assert ^user = conn.private.absinthe.context.current_user
@@ -28,7 +28,7 @@ defmodule Gannbaruzoi.ContextTest do
       build_conn()
       |> put_req_header("uid", "aaaa")
       |> put_req_header("client", auth.client)
-      |> put_req_header("access-token", auth.token)
+      |> put_req_header("access-token", auth.access_token)
       |> Context.call(%{})
 
     assert 403 = conn.status

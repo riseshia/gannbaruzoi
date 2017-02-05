@@ -71,10 +71,10 @@ defmodule Gannbaruzoi.UserTest do
       now = DateTime.utc_now() |> DateTime.to_unix()
       fifteen_days_later = now + 60 * 60 * 24 * 14
 
-      assert User.valid_token?(user, auth.client, auth.token)
-      refute User.valid_token?(user, "wrong client", auth.token)
+      assert User.valid_token?(user, auth.client, auth.access_token)
+      refute User.valid_token?(user, "wrong client", auth.access_token)
       refute User.valid_token?(user, auth.client, "wrong token")
-      refute User.valid_token?(user, auth.client, auth.token,
+      refute User.valid_token?(user, auth.client, auth.access_token,
                                fifteen_days_later)
     end
   end
