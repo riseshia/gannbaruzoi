@@ -4,14 +4,22 @@ defmodule Gannbaruzoi.TasksTest do
   describe "query tasks" do
     document(
       """
-      {
-        tasks {
-          id
-          description
-          estimated_size
-          type
-          parent_id
-          status
+      query Tasks {
+        tasks(first: 10) {
+          edges {
+            cursor
+            node {
+              id
+              description
+              estimated_size
+              type
+              parent_id
+              status
+            }
+          }
+          pageInfo {
+            hasNextPage
+          }
         }
       }
       """
@@ -22,7 +30,8 @@ defmodule Gannbaruzoi.TasksTest do
       insert!(:task, user: user)
       result = execute_query(document, context: %{current_user: user})
 
-      assert {:ok, %{data: %{"tasks" => [task]}}} = result
+      assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
+             result
       assert ~w(description estimated_size id parent_id status type) ==
              Map.keys(task)
     end

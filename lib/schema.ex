@@ -14,7 +14,7 @@ defmodule Gannbaruzoi.Schema do
 
   query do
     @desc "Get all tasks of current user"
-    field :tasks, list_of(:task) do
+    connection field :tasks, node_type: :task do
       resolve &TaskResolver.all/2
     end
   end
