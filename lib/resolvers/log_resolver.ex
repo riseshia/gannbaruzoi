@@ -2,14 +2,13 @@ defmodule Gannbaruzoi.LogResolver do
   @moduledoc """
   The resolvers of log
   """
-  alias Gannbaruzoi.Repo
-  alias Gannbaruzoi.Log
+  alias Gannbaruzoi.{Repo, Log}
 
   def create(%{task_id: task_id}, _info) do
     log =
       %Log{task_id: String.to_integer(task_id)}
-      |> Log.changeset
-      |> Repo.insert!
+      |> Log.changeset()
+      |> Repo.insert!()
     {:ok, %{log: log}}
   end
 

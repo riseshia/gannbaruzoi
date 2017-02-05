@@ -28,7 +28,7 @@ defmodule Gannbaruzoi.AuthTest do
     )
 
     test "returns session info", %{document: document} do
-      generate_user()
+      insert!(:user, %{email: @email, password: @password})
       variables = %{
         "clientMutationId" => "1",
         "email" => @email,
@@ -41,7 +41,7 @@ defmodule Gannbaruzoi.AuthTest do
     end
 
     test "fails to create with invalid email", %{document: document} do
-      generate_user()
+      insert!(:user, %{email: @email, password: @password})
       variables = %{
         "clientMutationId" => "1",
         "email" => "aaaa",
@@ -54,7 +54,7 @@ defmodule Gannbaruzoi.AuthTest do
     end
 
     test "fails to create with invalid password", %{document: document} do
-      generate_user()
+      insert!(:user, %{email: @email, password: @password})
       variables = %{
         "clientMutationId" => "1",
         "email" => @email,
@@ -82,7 +82,7 @@ defmodule Gannbaruzoi.AuthTest do
     )
 
     test "deletes token with valid args", %{document: document} do
-      generate_user()
+      insert!(:user, %{email: @email, password: @password})
       auth = generate_auth()
       user = Repo.get_by!(User, email: @email)
 
@@ -98,7 +98,7 @@ defmodule Gannbaruzoi.AuthTest do
     end
 
     test "fails to delete token with invalid client", %{document: document} do
-      generate_user()
+      insert!(:user, %{email: @email, password: @password})
       generate_auth()
       user = Repo.get_by!(User, email: @email)
       variables = %{
@@ -114,7 +114,7 @@ defmodule Gannbaruzoi.AuthTest do
     end
 
     test "fails to delete token when not login", %{document: document} do
-      generate_user()
+      insert!(:user, %{email: @email, password: @password})
       variables = %{
         "clientMutationId" => "1",
         "client" => "invalid",
@@ -126,16 +126,10 @@ defmodule Gannbaruzoi.AuthTest do
     end
   end
 
-  defp generate_user do
-    %User{}
-    |> User.changeset(%{email: @email, password: @password})
-    |> Repo.insert!
-  end
-
   defp generate_auth do
     Repo.get_by!(User, email: @email)
     |> User.build_session()
-    |> Repo.update!
+    |> Repo.update!()
     |> Map.get(:auth)
   end
 end

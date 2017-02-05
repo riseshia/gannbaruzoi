@@ -1,6 +1,8 @@
 defmodule Gannbaruzoi.QueryHelper do
+  alias Gannbaruzoi.Schema
+
   def execute_query(document, options \\ []) do
-    Absinthe.run(document, Gannbaruzoi.Schema, options)
+    Absinthe.run(document, Schema, options)
   end
 
   defmacro document(document) do

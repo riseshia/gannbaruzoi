@@ -1,8 +1,9 @@
 defmodule Gannbaruzoi.UserTest do
   use Gannbaruzoi.ModelCase
 
-  alias Gannbaruzoi.User
   import Gannbaruzoi.Factory
+
+  alias Gannbaruzoi.User
 
   @valid_attrs %{email: "some content"}
   @invalid_attrs %{}
@@ -24,7 +25,7 @@ defmodule Gannbaruzoi.UserTest do
   describe "find_or_create_dummy/0" do
     test "find registered user" do
       expected_email = "exist@email.com"
-      insert!(:user, email: expected_email)
+      insert!(:user, %{email: expected_email})
       user = User.find_or_create_dummy
       assert expected_email == user.email
     end
@@ -82,9 +83,7 @@ defmodule Gannbaruzoi.UserTest do
     test "returns true or false" do
       password = "alice1234"
       email = "hey!@gmail.com"
-      %User{}
-      |> User.changeset(%{email: email, password: password})
-      |> Repo.insert!
+      insert!(:user, %{email: email, password: password})
       user = Repo.get_by!(User, email: email)
       assert User.match_password?(user, password)
       refute User.match_password?(user, "wrong-password")
@@ -92,7 +91,7 @@ defmodule Gannbaruzoi.UserTest do
   end
 
   defp generate_auth(email) do
-    insert!(:user, email: email)
+    insert!(:user, %{email: email})
     Repo.get_by!(User, email: email)
     |> User.build_session()
     |> Repo.update!
