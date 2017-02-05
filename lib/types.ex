@@ -3,6 +3,7 @@ defmodule Gannbaruzoi.Types do
   GraphQL Types
   """
   use Absinthe.Schema.Notation
+  import Absinthe.Relay.Connection.Notation
 
   @desc "A task"
   object :task do
@@ -13,6 +14,9 @@ defmodule Gannbaruzoi.Types do
     field :parent_id, :id
     field :status, :boolean
   end
+
+  @desc "Connection of Tasks"
+  connection node_type: :task
 
   @desc "A log"
   object :log do

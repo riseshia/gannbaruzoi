@@ -4,11 +4,15 @@ defmodule Gannbaruzoi.TaskResolver do
   """
   alias Gannbaruzoi.Repo
   alias Gannbaruzoi.Task
+  alias Absinthe.Relay.Connection
 
-  def all(_, _) do
+  def all(pagination_args, _) do
      # TODO: scope with user_id
-     task = Repo.all(Task)
-     {:ok, task}
+     conn =
+       Task
+       # |> where(user_id: ^user.id)
+       |> Connection.from_query(&Repo.all/1, pagination_args)
+     {:ok, conn}
   end
 
   def create(_parent, attributes, _info) do
