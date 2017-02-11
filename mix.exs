@@ -53,6 +53,7 @@ defmodule Gannbaruzoi.Mixfile do
      {:absinthe_plug, "~> 1.1"},
      {:absinthe_relay, "~> 1.1"},
      {:poison, "~> 2.2"},
+     {:cors_plug, "~> 1.2"},
      {:comeonin, "~> 3.0"},
      {:credo, "~> 0.5", only: [:dev, :test]},
      {:excoveralls, "~> 0.5", only: :test}
