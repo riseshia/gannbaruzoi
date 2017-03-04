@@ -4,6 +4,14 @@ defmodule Gannbaruzoi.LogResolver do
   """
   alias Gannbaruzoi.{Repo, Log}
 
+  def all(task, _, _) do
+     logs =
+      task
+      |> Ecto.assoc(:logs)
+      |> Repo.all
+     {:ok, logs}
+  end
+
   def create(%{task_id: task_id}, _info) do
     log =
       %Log{task_id: String.to_integer(task_id)}

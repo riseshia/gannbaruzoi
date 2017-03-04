@@ -13,6 +13,9 @@ defmodule Gannbaruzoi.Types do
     field :type, non_null(:task_enum)
     field :parent_id, :id
     field :status, non_null(:boolean)
+    field :logs, non_null(list_of(non_null(:log))) do
+      resolve &Gannbaruzoi.LogResolver.all/3
+    end
   end
 
   @desc "Connection of Tasks"
