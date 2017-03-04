@@ -17,6 +17,10 @@ defmodule Gannbaruzoi.Log do
     where(query, ^[task_id: task_id])
   end
 
+  def by_task_ids(query, task_ids) do
+    where(query, [m], m.task_id in ^task_ids)
+  end
+
   def recent(query \\ __MODULE__) do
     order_by(query, ^[desc: :inserted_at])
   end
