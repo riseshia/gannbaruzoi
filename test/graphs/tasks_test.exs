@@ -15,6 +15,7 @@ defmodule Gannbaruzoi.TasksTest do
               type
               parentId
               status
+              loggedSize
               logs {
                 id
                 taskId
@@ -36,8 +37,31 @@ defmodule Gannbaruzoi.TasksTest do
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
              result
-      assert ~w(description estimatedSize id logs parentId status type) ==
+      assert ~w(description estimatedSize id loggedSize logs parentId status type) ==
              Map.keys(task)
+    end
+
+    @tag login_as: "user@email.com"
+    test "returns tasks which loggedSize is 0",
+         %{document: document, user: user} do
+      insert!(:task, user: user)
+      result = execute_query(document, context: %{current_user: user})
+
+      assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
+             result
+      assert 0 == Map.get(task, "loggedSize")
+    end
+
+    @tag login_as: "user@email.com"
+    test "returns tasks which loggedSize is 1",
+         %{document: document, user: user} do
+      inserted_task = insert!(:task, user: user)
+      insert!(:log, task: inserted_task)
+      result = execute_query(document, context: %{current_user: user})
+
+      assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
+             result
+      assert 1 == Map.get(task, "loggedSize")
     end
   end
 

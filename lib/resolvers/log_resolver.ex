@@ -12,6 +12,12 @@ defmodule Gannbaruzoi.LogResolver do
     end)
   end
 
+  def count(task, _, _) do
+    batch({__MODULE__, :count_by_task_ids}, task.id, fn batch_results ->
+      {:ok, Map.get(batch_results, task.id, 0)}
+    end)
+  end
+
   def create(%{task_id: task_id}, _info) do
     log =
       %Log{task_id: String.to_integer(task_id)}
@@ -31,5 +37,12 @@ defmodule Gannbaruzoi.LogResolver do
     |> Log.by_task_ids(task_ids)
     |> Repo.all
     |> Enum.group_by(&(&1.task_id))
+  end
+
+  def count_by_task_ids(_, task_ids) do
+    Log
+    |> Log.count_by_task_ids(task_ids)
+    |> Repo.all
+    |> Map.new
   end
 end

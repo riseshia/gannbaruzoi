@@ -13,6 +13,9 @@ defmodule Gannbaruzoi.Types do
     field :type, non_null(:task_enum)
     field :parent_id, :id
     field :status, non_null(:boolean)
+    field :logged_size, non_null(:integer) do
+      resolve &Gannbaruzoi.LogResolver.count/3
+    end
     field :logs, non_null(list_of(non_null(:log))) do
       resolve &Gannbaruzoi.LogResolver.all/3
     end

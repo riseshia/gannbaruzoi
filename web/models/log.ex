@@ -25,6 +25,11 @@ defmodule Gannbaruzoi.Log do
     order_by(query, ^[desc: :inserted_at])
   end
 
+  def count_by_task_ids(query, task_ids) do
+    from(l in __MODULE__, group_by: l.task_id, select: {l.task_id, count(l.id)})
+    |> by_task_ids(task_ids)
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
