@@ -55,8 +55,8 @@ defmodule Gannbaruzoi.TasksTest do
     @tag login_as: "user@email.com"
     test "returns tasks which loggedSize is 1",
          %{document: document, user: user} do
-      task = insert!(:task, user: user)
-      insert!(:log, task: task)
+      inserted_task = insert!(:task, user: user)
+      insert!(:log, task: inserted_task)
       result = execute_query(document, context: %{current_user: user})
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
