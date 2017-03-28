@@ -5,6 +5,7 @@ defmodule Gannbaruzoi.User do
 
   use Gannbaruzoi.Web, :model
   alias Gannbaruzoi.{Repo, User}
+  alias Comeonin.Bcrypt
 
   schema "users" do
     field :email, :string
@@ -40,7 +41,7 @@ defmodule Gannbaruzoi.User do
 
     new_tokens =
       Map.put(tokens, client, %{
-        token: Comeonin.Bcrypt.hashpwsalt(token),
+        token: Bcrypt.hashpwsalt(token),
         expiry: expiry
       })
 
@@ -55,12 +56,12 @@ defmodule Gannbaruzoi.User do
   def valid_token?(user, client, token,
                    now \\ DateTime.utc_now() |> DateTime.to_unix()) do
     tokens = user.tokens[client]
-    tokens && Comeonin.Bcrypt.checkpw(token, tokens["token"]) &&
+    tokens && Bcrypt.checkpw(token, tokens["token"]) &&
       now < tokens["expiry"]
   end
 
   def match_password?(user, password) do
-    Comeonin.Bcrypt.checkpw(password, user.encrypted_password)
+    Bcrypt.checkpw(password, user.encrypted_password)
   end
 
   defp random_string(length) do
@@ -85,7 +86,7 @@ defmodule Gannbaruzoi.User do
   defp put_pass_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
-         put_change(changeset, :encrypted_password, Comeonin.Bcrypt.hashpwsalt(pass))
+         put_change(changeset, :encrypted_password, Bcrypt.hashpwsalt(pass))
       _ ->
          changeset
     end

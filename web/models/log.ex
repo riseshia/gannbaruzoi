@@ -45,9 +45,11 @@ defmodule Gannbaruzoi.Log do
   Builds a changeset for create, based on the `struct` and `params`.
   """
   def create_changeset(struct, params \\ %{}) do
-    changeset(struct, params)
+    struct
+    |> changeset(params)
     |> prepare_changes(fn changeset ->
-      assoc(changeset.data, :task)
+      changeset.data
+      |> assoc(:task)
       |> changeset.repo.update_all(inc: [logged_size: 1])
       changeset
     end)
@@ -57,9 +59,11 @@ defmodule Gannbaruzoi.Log do
   Builds a changeset for delete, based on the `struct` and `params`.
   """
   def delete_changeset(struct) do
-    changeset(struct)
+    struct
+    |> changeset()
     |> prepare_changes(fn changeset ->
-      assoc(changeset.data, :task)
+      changeset.data
+      |> assoc(:task)
       |> changeset.repo.update_all(inc: [logged_size: -1])
       changeset
     end)
