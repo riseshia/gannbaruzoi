@@ -8,7 +8,7 @@ defmodule Gannbaruzoi.Factory do
   end
 
   def build(:log, attributes) do
-    Log.with_task_id(attributes.task_id)
+    %Log{task_id: attributes.task_id} |> Log.create_changeset()
   end
 
   def build(:task, attributes) do

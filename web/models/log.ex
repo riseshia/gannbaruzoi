@@ -26,13 +26,6 @@ defmodule Gannbaruzoi.Log do
   end
 
   @doc """
-  Returns changeset of log with passed task_id
-  """
-  def with_task_id(task_id) do
-    %__MODULE__{task_id: task_id} |> create_changeset()
-  end
-
-  @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
