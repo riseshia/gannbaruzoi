@@ -9,14 +9,14 @@ defmodule Gannbaruzoi.Factory do
     %Task{description: "Default Todo", estimated_size: 1, type: "root"}
   end
 
-  def build(:log) do
-    %Log{}
-  end
-
   # Convenience API
 
   def build(:user, attributes) do
     :user |> build() |> User.changeset(attributes)
+  end
+
+  def build(:log, attributes) do
+    Log.with_task_id(attributes.task_id)
   end
 
   def build(factory_name, attributes) do
@@ -27,7 +27,9 @@ defmodule Gannbaruzoi.Factory do
     Repo.insert! build(factory_name, attributes)
   end
 
-  def delete!(model) do
-    Repo.delete!(model)
+  def delete!(:log, model) do
+    model
+    |> Log.delete_changeset()
+    |> Repo.delete!()
   end
 end

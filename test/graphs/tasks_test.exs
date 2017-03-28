@@ -56,7 +56,7 @@ defmodule Gannbaruzoi.TasksTest do
     test "returns tasks which loggedSize is 1",
          %{document: document, user: user} do
       inserted_task = insert!(:task, user: user)
-      insert!(:log, task: inserted_task)
+      insert!(:log, %{task_id: inserted_task.id})
       result = execute_query(document, context: %{current_user: user})
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
@@ -68,9 +68,8 @@ defmodule Gannbaruzoi.TasksTest do
     test "returns tasks which loggedSize is still 0",
          %{document: document, user: user} do
       inserted_task = insert!(:task, user: user)
-      :log
-      |> insert!(task: inserted_task)
-      |> delete!()
+      log = insert!(:log, %{task_id: inserted_task.id})
+      delete!(:log, log)
       result = execute_query(document, context: %{current_user: user})
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =

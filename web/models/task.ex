@@ -10,6 +10,7 @@ defmodule Gannbaruzoi.Task do
   schema "tasks" do
     field :description, :string
     field :estimated_size, :integer
+    field :logged_size, :integer, default: 0
     field :type, :string
     field :status, :boolean, default: false
     belongs_to :user, Gannbaruzoi.User
