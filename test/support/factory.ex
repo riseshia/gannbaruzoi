@@ -26,4 +26,8 @@ defmodule Gannbaruzoi.Factory do
   def insert!(factory_name, attributes \\ %{}) do
     Repo.insert! build(factory_name, attributes)
   end
+
+  def delete!(model) do
+    Repo.delete!(model)
+  end
 end

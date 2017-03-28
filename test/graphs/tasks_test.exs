@@ -63,6 +63,20 @@ defmodule Gannbaruzoi.TasksTest do
              result
       assert 1 == Map.get(task, "loggedSize")
     end
+
+    @tag login_as: "user@email.com"
+    test "returns tasks which loggedSize is still 0",
+         %{document: document, user: user} do
+      inserted_task = insert!(:task, user: user)
+      :log
+      |> insert!(task: inserted_task)
+      |> delete!()
+      result = execute_query(document, context: %{current_user: user})
+
+      assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
+             result
+      assert 0 == Map.get(task, "loggedSize")
+    end
   end
 
   describe "mutation createTask" do
