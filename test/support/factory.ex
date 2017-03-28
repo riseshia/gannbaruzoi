@@ -1,26 +1,19 @@
 defmodule Gannbaruzoi.Factory do
   alias Gannbaruzoi.{Repo, User, Task, Log}
 
-  def build(:user) do
-    %User{email: "default@email.com"}
-  end
-
-  def build(:task) do
-    %Task{description: "Default Todo", estimated_size: 1, type: "root"}
-  end
-
   # Convenience API
-
+  def build(factory_name, attributes \\ %{})
   def build(:user, attributes) do
-    :user |> build() |> User.changeset(attributes)
+    %User{email: "default@email.com"} |> User.changeset(attributes)
   end
 
   def build(:log, attributes) do
     Log.with_task_id(attributes.task_id)
   end
 
-  def build(factory_name, attributes) do
-    factory_name |> build() |> struct(attributes)
+  def build(:task, attributes) do
+    %Task{description: "Default Todo", estimated_size: 1, type: "root"}
+    |> Task.changeset(attributes)
   end
 
   def insert!(factory_name, attributes \\ %{}) do
