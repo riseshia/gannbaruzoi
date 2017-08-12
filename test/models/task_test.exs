@@ -34,7 +34,7 @@ defmodule Gannbaruzoi.TaskTest do
   end
 
   test "changeset with different user's parent task is invalid" do
-    parent = insert!(:task, user_id: insert!(:user).id)
+    parent = insert!(:task, %{user_id: insert!(:user).id})
     invalid_parent_attrs =
       Map.merge(@valid_attrs, %{parent_id: parent.id, user_id: parent.user_id + 1})
     changeset = Task.changeset(%Task{}, invalid_parent_attrs)

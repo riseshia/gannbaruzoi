@@ -32,7 +32,7 @@ defmodule Gannbaruzoi.TasksTest do
 
     @tag login_as: "user@email.com"
     test "returns all tasks", %{document: document, user: user} do
-      insert!(:task, user: user)
+      insert!(:task, %{user: user})
       result = execute_query(document, context: %{current_user: user})
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
@@ -44,7 +44,7 @@ defmodule Gannbaruzoi.TasksTest do
     @tag login_as: "user@email.com"
     test "returns tasks which loggedSize is 0",
          %{document: document, user: user} do
-      insert!(:task, user: user)
+      insert!(:task, %{user: user})
       result = execute_query(document, context: %{current_user: user})
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
@@ -55,13 +55,26 @@ defmodule Gannbaruzoi.TasksTest do
     @tag login_as: "user@email.com"
     test "returns tasks which loggedSize is 1",
          %{document: document, user: user} do
-      inserted_task = insert!(:task, user: user)
-      insert!(:log, task: inserted_task)
+      inserted_task = insert!(:task, %{user: user})
+      insert!(:log, %{task_id: inserted_task.id})
       result = execute_query(document, context: %{current_user: user})
 
       assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
              result
       assert 1 == Map.get(task, "loggedSize")
+    end
+
+    @tag login_as: "user@email.com"
+    test "returns tasks which loggedSize is still 0",
+         %{document: document, user: user} do
+      inserted_task = insert!(:task, %{user: user})
+      log = insert!(:log, %{task_id: inserted_task.id})
+      delete!(:log, log)
+      result = execute_query(document, context: %{current_user: user})
+
+      assert {:ok, %{data: %{"tasks" => %{"edges" => [%{"node" => task}]}}}} =
+             result
+      assert 0 == Map.get(task, "loggedSize")
     end
   end
 
@@ -113,7 +126,7 @@ defmodule Gannbaruzoi.TasksTest do
     @tag login_as: "user@email.com"
     test "returns new subtask with valid args",
          %{document: document, user: user} do
-      task = insert!(:task, user_id: user.id)
+      task = insert!(:task, %{user_id: user.id})
       variables = %{
         "clientMutationId" => "1",
         "description" => "New todo",
@@ -175,7 +188,7 @@ defmodule Gannbaruzoi.TasksTest do
 
     @tag login_as: "user@email.com"
     test "updates task with valid args", %{document: document, user: user} do
-      task = insert!(:task, user: user)
+      task = insert!(:task, %{user: user})
       variables = %{
         "clientMutationId" => "1",
         "id" => task.id,
@@ -225,7 +238,7 @@ defmodule Gannbaruzoi.TasksTest do
 
     @tag login_as: "user@email.com"
     test "deletes task with valid args", %{document: document, user: user} do
-      task = insert!(:task, user: user)
+      task = insert!(:task, %{user: user})
       variables = %{"clientMutationId" => "1", "id" => task.id}
       result = execute_query(document,
                              variables: variables,

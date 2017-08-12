@@ -25,11 +25,6 @@ defmodule Gannbaruzoi.Log do
     order_by(query, ^[desc: :inserted_at])
   end
 
-  def count_by_task_ids(query, task_ids) do
-    from(l in __MODULE__, group_by: l.task_id, select: {l.task_id, count(l.id)})
-    |> by_task_ids(task_ids)
-  end
-
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -37,5 +32,33 @@ defmodule Gannbaruzoi.Log do
     struct
     |> cast(params, [])
     |> validate_required([])
+  end
+
+  @doc """
+  Builds a changeset for create, based on the `struct` and `params`.
+  """
+  def create_changeset(struct, params \\ %{}) do
+    struct
+    |> changeset(params)
+    |> prepare_changes(fn changeset ->
+      changeset.data
+      |> assoc(:task)
+      |> changeset.repo.update_all(inc: [logged_size: 1])
+      changeset
+    end)
+  end
+
+  @doc """
+  Builds a changeset for delete, based on the `struct` and `params`.
+  """
+  def delete_changeset(struct) do
+    struct
+    |> changeset()
+    |> prepare_changes(fn changeset ->
+      changeset.data
+      |> assoc(:task)
+      |> changeset.repo.update_all(inc: [logged_size: -1])
+      changeset
+    end)
   end
 end

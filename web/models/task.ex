@@ -4,12 +4,12 @@ defmodule Gannbaruzoi.Task do
   """
 
   use Gannbaruzoi.Web, :model
-  alias Gannbaruzoi.Repo
-  alias Gannbaruzoi.Task
+  alias Gannbaruzoi.{Repo,Task}
 
   schema "tasks" do
     field :description, :string
     field :estimated_size, :integer
+    field :logged_size, :integer, default: 0
     field :type, :string
     field :status, :boolean, default: false
     belongs_to :user, Gannbaruzoi.User
@@ -24,7 +24,8 @@ defmodule Gannbaruzoi.Task do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:description, :estimated_size, :status, :parent_id, :user_id])
+    |> cast(params, [:description, :estimated_size, :status,
+                     :parent_id, :user_id])
     |> put_type()
     |> validate_required([:description, :estimated_size, :type, :status])
     |> validate_parent_id()

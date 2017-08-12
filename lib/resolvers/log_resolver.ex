@@ -38,11 +38,4 @@ defmodule Gannbaruzoi.LogResolver do
     |> Repo.all
     |> Enum.group_by(&(&1.task_id))
   end
-
-  def count_by_task_ids(_, task_ids) do
-    Log
-    |> Log.count_by_task_ids(task_ids)
-    |> Repo.all
-    |> Map.new
-  end
 end

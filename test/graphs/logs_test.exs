@@ -20,7 +20,7 @@ defmodule Gannbaruzoi.LogsTest do
 
     @tag login_as: "user@email.com"
     test "returns new log with valid args", %{document: document, user: user} do
-      task = insert!(:task, user: user)
+      task = insert!(:task, %{user: user})
       variables = %{"clientMutationId" => "1", "taskId" => task.id}
       result = execute_query(document, variables: variables)
 
@@ -54,8 +54,8 @@ defmodule Gannbaruzoi.LogsTest do
 
     @tag login_as: "user@email.com"
     test "deletes log with valid args", %{document: document, user: user} do
-      task = insert!(:task, user: user)
-      log = insert!(:log, task_id: task.id)
+      task = insert!(:task, %{user: user})
+      log = insert!(:log, %{task_id: task.id})
 
       variables = %{"clientMutationId" => "1", "taskId" => log.task_id}
       result = execute_query(document, variables: variables)
