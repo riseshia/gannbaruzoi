@@ -11,7 +11,7 @@ defmodule Gannbaruzoi.LogsTest do
         }) {
           log {
             id
-            task_id
+            taskId
           }
         }
       }
@@ -25,7 +25,7 @@ defmodule Gannbaruzoi.LogsTest do
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{data: %{"createLog" => %{"log" => log}}}} = result
-      assert ~w(id task_id) == Map.keys(log)
+      assert ~w(id taskId) == Map.keys(log)
     end
 
     @tag login_as: "user@email.com"
