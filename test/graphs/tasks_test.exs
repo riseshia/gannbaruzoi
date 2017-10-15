@@ -96,9 +96,9 @@ defmodule Gannbaruzoi.TasksTest do
           task {
             id
             description
-            estimated_size
+            estimatedSize
             type
-            parent_id
+            parentId
             status
           }
         }
@@ -119,7 +119,7 @@ defmodule Gannbaruzoi.TasksTest do
                              context: %{current_user: user})
 
       assert {:ok, %{data: %{"createTask" => %{"task" => task}}}} = result
-      assert ~w(description estimated_size id parent_id status type) ==
+      assert ~w(description estimatedSize id parentId status type) ==
              Map.keys(task)
     end
 
@@ -138,7 +138,7 @@ defmodule Gannbaruzoi.TasksTest do
                              context: %{current_user: user})
 
       assert {:ok, %{data: %{"createTask" => %{"task" => task}}}} = result
-      assert ~w(description estimated_size id parent_id status type) ==
+      assert ~w(description estimatedSize id parentId status type) ==
              Map.keys(task)
     end
 
@@ -176,9 +176,9 @@ defmodule Gannbaruzoi.TasksTest do
           task {
             id
             description
-            estimated_size
+            estimatedSize
             type
-            parent_id
+            parentId
             status
           }
         }
@@ -200,7 +200,7 @@ defmodule Gannbaruzoi.TasksTest do
                              context: %{current_user: user})
 
       assert {:ok, %{data: %{"updateTask" => %{"task" => task}}}} = result
-      assert ~w(description estimated_size id parent_id status type) ==
+      assert ~w(description estimatedSize id parentId status type) ==
              Map.keys(task)
     end
 
