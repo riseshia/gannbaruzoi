@@ -147,14 +147,17 @@ defmodule Gannbaruzoi.TasksTest do
          %{document: document, user: user} do
       variables = %{
         "clientMutationId" => "1",
-        "description" => nil
+        "description" => "",
+        "estimatedSize" => 5
       }
       result = execute_query(document,
                              variables: variables,
                              context: %{current_user: user})
 
-      assert {:ok, %{errors: errors}} = result
-      assert 1 == length(errors)
+      assert {:ok, %{errors: [%{
+        locations: [%{column: 0, line: 7}],
+        message: "In field \"createTask\": description can't be blank"
+      }]}} = result
     end
   end
 
@@ -207,18 +210,21 @@ defmodule Gannbaruzoi.TasksTest do
     @tag login_as: "user@email.com"
     test "fails to update task with invalid args",
          %{document: document, user: user} do
+      task = insert!(:task, %{user: user})
       variables = %{
         "clientMutationId" => "1",
-        "id" => nil,
-        "description" => "Updated Todo",
+        "id" => task.id,
+        "description" => "",
         "estimatedSize" => 2
       }
       result = execute_query(document,
                              variables: variables,
                              context: %{current_user: user})
 
-      assert {:ok, %{errors: errors}} = result
-      assert 1 == length(errors)
+      assert {:ok, %{errors: [%{
+        locations: [%{column: 0, line: 7}],
+        message: "In field \"updateTask\": description can't be blank"
+      }]}} = result
     end
   end
 
