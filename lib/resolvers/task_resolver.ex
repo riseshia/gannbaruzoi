@@ -19,7 +19,10 @@ defmodule Gannbaruzoi.TaskResolver do
 
     case Repo.insert(changeset) do
       {:ok, task} -> {:ok, %{task: task}}
-      {:error, changeset} -> {:error, changeset.errors}
+      {:error, changeset} ->
+        errors = Enum.map(changeset.errors,
+                          fn {k, {v, _}} -> %{message: "#{k} #{v}"} end)
+        {:error, errors}
     end
   end
 
@@ -28,7 +31,10 @@ defmodule Gannbaruzoi.TaskResolver do
 
     case Repo.update(changeset) do
       {:ok, task} -> {:ok, %{task: task}}
-      {:error, changeset} -> {:error, changeset.errors}
+      {:error, changeset} ->
+        errors = Enum.map(changeset.errors,
+                          fn {k, {v, _}} -> %{message: "#{k} #{v}"} end)
+        {:error, errors}
     end
   end
 
