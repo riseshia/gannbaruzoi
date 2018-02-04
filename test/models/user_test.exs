@@ -9,9 +9,10 @@ defmodule Gannbaruzoi.UserTest do
   @invalid_attrs %{}
 
   test "find_or_create_dummy with no registed user" do
-    User.find_or_create_dummy
+    User.find_or_create_dummy()
     assert 1 == Repo.aggregate(User, :count, :id)
   end
+
   test "changeset with valid attributes" do
     changeset = User.changeset(%User{}, @valid_attrs)
     assert changeset.valid?
@@ -26,15 +27,14 @@ defmodule Gannbaruzoi.UserTest do
     test "find registered user" do
       expected_email = "exist@email.com"
       insert!(:user, %{email: expected_email})
-      user = User.find_or_create_dummy
+      user = User.find_or_create_dummy()
       assert expected_email == user.email
     end
 
     test "create dummy user" do
-      assert %User{} = User.find_or_create_dummy
+      assert %User{} = User.find_or_create_dummy()
     end
   end
-
 
   describe "build_session/2" do
     test "create auth and tokens" do
@@ -54,9 +54,11 @@ defmodule Gannbaruzoi.UserTest do
       email = "hey-man@gmail.com"
       auth = generate_auth(email)
       client = auth.client
-      user = Repo.get_by!(User, email: email)
-             |> User.delete_session(client)
-             |> Repo.update!
+
+      user =
+        Repo.get_by!(User, email: email)
+        |> User.delete_session(client)
+        |> Repo.update!()
 
       refute Map.get(user.tokens, client)
     end
@@ -74,8 +76,7 @@ defmodule Gannbaruzoi.UserTest do
       assert User.valid_token?(user, auth.client, auth.access_token)
       refute User.valid_token?(user, "wrong client", auth.access_token)
       refute User.valid_token?(user, auth.client, "wrong token")
-      refute User.valid_token?(user, auth.client, auth.access_token,
-                               fifteen_days_later)
+      refute User.valid_token?(user, auth.client, auth.access_token, fifteen_days_later)
     end
   end
 
@@ -92,9 +93,10 @@ defmodule Gannbaruzoi.UserTest do
 
   defp generate_auth(email) do
     insert!(:user, %{email: email})
+
     Repo.get_by!(User, email: email)
     |> User.build_session()
-    |> Repo.update!
+    |> Repo.update!()
     |> Map.get(:auth)
   end
 end

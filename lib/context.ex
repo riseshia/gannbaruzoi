@@ -11,10 +11,12 @@ defmodule Gannbaruzoi.Context do
     case build_context(conn) do
       {:ok, context} ->
         put_private(conn, :absinthe, %{context: context})
+
       {:error, reason} ->
         conn
         |> send_resp(403, reason)
         |> halt()
+
       _ ->
         conn
         |> send_resp(400, "Bad Request")
@@ -30,8 +32,7 @@ defmodule Gannbaruzoi.Context do
          [client] <- get_req_header(conn, "client"),
          [access_token] <- get_req_header(conn, "access-token"),
          current_user <- Repo.get_by(User, email: uid),
-         true <- current_user &&
-                 User.valid_token?(current_user, client, access_token) do
+         true <- current_user && User.valid_token?(current_user, client, access_token) do
       {:ok, %{current_user: current_user}}
     else
       [] -> {:ok, %{}}

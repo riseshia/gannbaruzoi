@@ -2,21 +2,19 @@ defmodule Gannbaruzoi.LogsTest do
   use Gannbaruzoi.GraphCase
 
   describe "mutation createLog" do
-    document(
-      """
-      mutation($clientMutationId: String!, $taskId: ID!) {
-        createLog(input: {
-          clientMutationId: $clientMutationId,
-          taskId: $taskId
-        }) {
-          log {
-            id
-            taskId
-          }
+    document("""
+    mutation($clientMutationId: String!, $taskId: ID!) {
+      createLog(input: {
+        clientMutationId: $clientMutationId,
+        taskId: $taskId
+      }) {
+        log {
+          id
+          taskId
         }
       }
-      """
-    )
+    }
+    """)
 
     @tag login_as: "user@email.com"
     test "returns new log with valid args", %{document: document, user: user} do
@@ -34,23 +32,21 @@ defmodule Gannbaruzoi.LogsTest do
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{errors: errors}} = result
-      assert 1 == length(errors)
+      assert 2 == length(errors)
     end
   end
 
   describe "mutation deleteLog" do
-    document(
-      """
-      mutation($clientMutationId: String!, $taskId: ID!) {
-        deleteLog(input: {
-          clientMutationId: $clientMutationId,
-          taskId: $taskId
-        }) {
-          id
-        }
+    document("""
+    mutation($clientMutationId: String!, $taskId: ID!) {
+      deleteLog(input: {
+        clientMutationId: $clientMutationId,
+        taskId: $taskId
+      }) {
+        id
       }
-      """
-    )
+    }
+    """)
 
     @tag login_as: "user@email.com"
     test "deletes log with valid args", %{document: document, user: user} do
@@ -68,8 +64,7 @@ defmodule Gannbaruzoi.LogsTest do
       variables = %{"clientMutationId" => "1", "taskId" => nil}
       result = execute_query(document, variables: variables)
       assert {:ok, %{errors: errors}} = result
-      assert 1 == length(errors)
+      assert 2 == length(errors)
     end
   end
 end
-

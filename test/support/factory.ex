@@ -3,6 +3,7 @@ defmodule Gannbaruzoi.Factory do
 
   # Convenience API
   def build(factory_name, attributes \\ %{})
+
   def build(:user, attributes) do
     %User{email: "default@email.com"} |> User.changeset(attributes)
   end
@@ -17,7 +18,7 @@ defmodule Gannbaruzoi.Factory do
   end
 
   def insert!(factory_name, attributes \\ %{}) do
-    Repo.insert! build(factory_name, attributes)
+    Repo.insert!(build(factory_name, attributes))
   end
 
   def delete!(:log, model) do

@@ -15,7 +15,7 @@ defmodule Gannbaruzoi do
       # Start the Ecto repository
       supervisor(Gannbaruzoi.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Gannbaruzoi.Endpoint, []),
+      supervisor(Gannbaruzoi.Endpoint, [])
       # Start your own worker by calling:
       #   Gannbaruzoi.Worker.start_link(arg1, arg2, arg3)
       #

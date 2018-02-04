@@ -16,6 +16,7 @@ defmodule Gannbaruzoi.ConnCase do
   use ExUnit.CaseTemplate
 
   alias Gannbaruzoi.Repo
+
   using do
     quote do
       # Import conveniences for testing with connections

@@ -23,6 +23,7 @@ defmodule Gannbaruzoi.LogResolver do
       %Log{task_id: String.to_integer(task_id)}
       |> Log.changeset()
       |> Repo.insert!()
+
     {:ok, %{log: log}}
   end
 
@@ -35,7 +36,7 @@ defmodule Gannbaruzoi.LogResolver do
   def by_task_ids(_, task_ids) do
     Log
     |> Log.by_task_ids(task_ids)
-    |> Repo.all
-    |> Enum.group_by(&(&1.task_id))
+    |> Repo.all()
+    |> Enum.group_by(fn log -> log.task_id end)
   end
 end
