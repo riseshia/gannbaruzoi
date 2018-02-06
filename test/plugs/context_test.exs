@@ -10,6 +10,7 @@ defmodule Gannbaruzoi.ContextTest do
     insert!(:user, %{email: @email, password: @password})
     auth = generate_auth()
     user = Repo.get_by!(User, email: @email)
+
     conn =
       build_conn()
       |> put_req_header("uid", auth.uid)
@@ -24,6 +25,7 @@ defmodule Gannbaruzoi.ContextTest do
   test "current_user is assigned when invalid header" do
     insert!(:user, %{email: @email, password: @password})
     auth = generate_auth()
+
     conn =
       build_conn()
       |> put_req_header("uid", "aaaa")
@@ -46,7 +48,7 @@ defmodule Gannbaruzoi.ContextTest do
   defp generate_auth do
     Repo.get_by!(User, email: @email)
     |> User.build_session()
-    |> Repo.update!
+    |> Repo.update!()
     |> Map.get(:auth)
   end
 end

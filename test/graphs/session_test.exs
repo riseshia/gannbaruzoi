@@ -7,33 +7,33 @@ defmodule Gannbaruzoi.AuthTest do
   @password "alice1234"
 
   describe "mutation createSession" do
-    document(
-      """
-      mutation($clientMutationId: String!,
-               $email: String!,
-               $password: String!) {
-        createSession(input: {
-          clientMutationId: $clientMutationId,
-          email: $email,
-          password: $password
-        }) {
-          auth {
-            uid
-            client
-            accessToken
-          }
+    document("""
+    mutation($clientMutationId: String!,
+             $email: String!,
+             $password: String!) {
+      createSession(input: {
+        clientMutationId: $clientMutationId,
+        email: $email,
+        password: $password
+      }) {
+        auth {
+          uid
+          client
+          accessToken
         }
       }
-      """
-    )
+    }
+    """)
 
     test "returns session info", %{document: document} do
       insert!(:user, %{email: @email, password: @password})
+
       variables = %{
         "clientMutationId" => "1",
         "email" => @email,
         "password" => @password
       }
+
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{data: %{"createSession" => %{"auth" => auth}}}} = result
@@ -42,11 +42,13 @@ defmodule Gannbaruzoi.AuthTest do
 
     test "fails to create with invalid email", %{document: document} do
       insert!(:user, %{email: @email, password: @password})
+
       variables = %{
         "clientMutationId" => "1",
         "email" => "aaaa",
         "password" => @password
       }
+
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{errors: errors}} = result
@@ -55,11 +57,13 @@ defmodule Gannbaruzoi.AuthTest do
 
     test "fails to create with invalid password", %{document: document} do
       insert!(:user, %{email: @email, password: @password})
+
       variables = %{
         "clientMutationId" => "1",
         "email" => @email,
         "password" => "hahaha"
       }
+
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{errors: errors}} = result
@@ -68,18 +72,16 @@ defmodule Gannbaruzoi.AuthTest do
   end
 
   describe "mutation deleteSession" do
-    document(
-      """
-      mutation($clientMutationId: String!, $client: String!) {
-        deleteSession(input: {
-          clientMutationId: $clientMutationId,
-          client: $client
-        }) {
-          result
-        }
+    document("""
+    mutation($clientMutationId: String!, $client: String!) {
+      deleteSession(input: {
+        clientMutationId: $clientMutationId,
+        client: $client
+      }) {
+        result
       }
-      """
-    )
+    }
+    """)
 
     test "deletes token with valid args", %{document: document} do
       insert!(:user, %{email: @email, password: @password})
@@ -88,11 +90,15 @@ defmodule Gannbaruzoi.AuthTest do
 
       variables = %{
         "clientMutationId" => "1",
-        "client" => auth.client,
+        "client" => auth.client
       }
-      result = execute_query(document,
-                             variables: variables,
-                             context: %{current_user: user})
+
+      result =
+        execute_query(
+          document,
+          variables: variables,
+          context: %{current_user: user}
+        )
 
       assert {:ok, %{data: %{"deleteSession" => %{"result" => "ok"}}}} = result
     end
@@ -101,13 +107,18 @@ defmodule Gannbaruzoi.AuthTest do
       insert!(:user, %{email: @email, password: @password})
       generate_auth()
       user = Repo.get_by!(User, email: @email)
+
       variables = %{
         "clientMutationId" => "1",
-        "client" => "invalid",
+        "client" => "invalid"
       }
-      result = execute_query(document,
-                             variables: variables,
-                             context: %{current_user: user})
+
+      result =
+        execute_query(
+          document,
+          variables: variables,
+          context: %{current_user: user}
+        )
 
       assert {:ok, %{errors: errors}} = result
       assert 1 == length(errors)
@@ -115,10 +126,12 @@ defmodule Gannbaruzoi.AuthTest do
 
     test "fails to delete token when not login", %{document: document} do
       insert!(:user, %{email: @email, password: @password})
+
       variables = %{
         "clientMutationId" => "1",
-        "client" => "invalid",
+        "client" => "invalid"
       }
+
       result = execute_query(document, variables: variables)
 
       assert {:ok, %{errors: errors}} = result
@@ -133,4 +146,3 @@ defmodule Gannbaruzoi.AuthTest do
     |> Map.get(:auth)
   end
 end
-

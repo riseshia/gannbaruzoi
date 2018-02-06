@@ -12,8 +12,7 @@ defmodule Gannbaruzoi.LogTest do
 
   test "get last log from task" do
     user = insert!(:user)
-    task = insert!(:task, %{user_id: user.id, description: "New todo",
-                            estimated_size: 1})
+    task = insert!(:task, %{user_id: user.id, description: "New todo", estimated_size: 1})
     log = insert!(:log, %{task_id: task.id})
 
     assert ^log = Log |> Log.by_task_id(task.id) |> Log.recent() |> Repo.one()

@@ -44,4 +44,3 @@ defmodule Gannbaruzoi.GraphCase do
     end
   end
 end
-

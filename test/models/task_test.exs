@@ -19,9 +19,10 @@ defmodule Gannbaruzoi.TaskTest do
   test "type will not be root if it have parent" do
     parent = insert!(:task)
     valid_attrs_with_parent = Map.put(@valid_attrs, :parent_id, parent.id)
+
     task =
       Task.changeset(%Task{}, valid_attrs_with_parent)
-      |> Repo.insert!
+      |> Repo.insert!()
 
     assert "branch" = task.type
   end
@@ -29,14 +30,17 @@ defmodule Gannbaruzoi.TaskTest do
   test "type will be root unless it have parent" do
     task =
       Task.changeset(%Task{}, @valid_attrs)
-      |> Repo.insert!
+      |> Repo.insert!()
+
     assert "root" = task.type
   end
 
   test "changeset with different user's parent task is invalid" do
     parent = insert!(:task, %{user_id: insert!(:user).id})
+
     invalid_parent_attrs =
       Map.merge(@valid_attrs, %{parent_id: parent.id, user_id: parent.user_id + 1})
+
     changeset = Task.changeset(%Task{}, invalid_parent_attrs)
 
     refute changeset.valid?

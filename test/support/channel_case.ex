@@ -25,7 +25,6 @@ defmodule Gannbaruzoi.ChannelCase do
       import Ecto.Changeset
       import Ecto.Query
 
-
       # The default endpoint for testing
       @endpoint Gannbaruzoi.Endpoint
     end
