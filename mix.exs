@@ -61,17 +61,18 @@ defmodule Gannbaruzoi.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.6"},
+      {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:absinthe_plug, "~> 1.4"},
       {:absinthe_relay, "~> 1.4"},
-      {:poison, "~> 2.2"},
-      {:cors_plug, "~> 1.2"},
-      {:comeonin, "~> 3.0"},
-      {:credo, "~> 0.5", only: [:dev, :test]},
-      {:excoveralls, "~> 0.5", only: :test}
+      {:poison, "~> 3.1"},
+      {:cors_plug, "~> 1.5"},
+      {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 1.0"},
+      {:credo, "~> 0.9", only: [:dev, :test]},
+      {:excoveralls, "~> 0.8", only: :test}
     ]
   end
 
