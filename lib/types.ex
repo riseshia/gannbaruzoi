@@ -5,6 +5,8 @@ defmodule Gannbaruzoi.Types do
   use Absinthe.Schema.Notation
   import Absinthe.Relay.Connection.Notation
 
+  alias Gannbaruzoi.LogResolver
+
   @desc "A task"
   object :task do
     field(:id, non_null(:id))
@@ -16,7 +18,7 @@ defmodule Gannbaruzoi.Types do
     field(:logged_size, non_null(:integer))
 
     field :logs, non_null(list_of(non_null(:log))) do
-      resolve(&Gannbaruzoi.LogResolver.all/3)
+      resolve(&LogResolver.all/3)
     end
   end
 

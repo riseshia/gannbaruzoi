@@ -4,7 +4,7 @@ defmodule Gannbaruzoi.Task do
   """
 
   use Gannbaruzoi.Web, :model
-  alias Gannbaruzoi.{Repo,Task}
+  alias Gannbaruzoi.{Repo, Task}
 
   schema "tasks" do
     field :description, :string

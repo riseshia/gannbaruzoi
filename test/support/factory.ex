@@ -1,4 +1,8 @@
 defmodule Gannbaruzoi.Factory do
+  @moduledoc """
+  Factory
+  """
+
   alias Gannbaruzoi.{Repo, User, Task, Log}
 
   # Convenience API

@@ -1,4 +1,8 @@
 defmodule Gannbaruzoi.Context do
+  @moduledoc """
+  Context
+  """
+
   @behaviour Plug
 
   import Plug.Conn

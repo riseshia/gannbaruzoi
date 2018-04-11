@@ -9,8 +9,8 @@ defmodule Gannbaruzoi.TaskResolver do
   def all(pagination_args, _) do
     # TODO: scope with user_id
     # |> where(user_id: ^user.id)
-    from(t in Task, select: t)
-    |> Connection.from_query(&Repo.all/1, pagination_args)
+    q = from(t in Task, select: t)
+    Connection.from_query(q, &Repo.all/1, pagination_args)
   end
 
   def create(_parent, attributes, _info) do
