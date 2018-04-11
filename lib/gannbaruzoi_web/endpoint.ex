@@ -1,4 +1,4 @@
-defmodule Gannbaruzoi.Endpoint do
+defmodule GannbaruzoiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :gannbaruzoi
 
   # Serve at "/" the static files from "priv/static" directory.
@@ -46,5 +46,5 @@ defmodule Gannbaruzoi.Endpoint do
     signing_salt: "VzXZ6UrP"
   )
 
-  plug(Gannbaruzoi.Router)
+  plug(GannbaruzoiWeb.Router)
 end

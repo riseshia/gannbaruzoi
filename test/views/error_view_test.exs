@@ -1,7 +1,7 @@
 defmodule Gannbaruzoi.ErrorViewTest do
-  use Gannbaruzoi.ConnCase, async: true
+  use GannbaruzoiWeb.ConnCase, async: true
 
-  alias Gannbaruzoi.ErrorView
+  alias GannbaruzoiWeb.ErrorView
 
   # Bring render/3 and render_to_string/3 for testing custom views
   import Phoenix.View

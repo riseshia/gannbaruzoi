@@ -3,7 +3,7 @@ defmodule Gannbaruzoi.Task do
   Task model
   """
 
-  use Gannbaruzoi.Web, :model
+  use GannbaruzoiWeb, :model
   alias Gannbaruzoi.{Repo, Task}
 
   schema "tasks" do

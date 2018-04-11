@@ -1,5 +1,5 @@
-defmodule Gannbaruzoi.PageControllerTest do
-  use Gannbaruzoi.ConnCase
+defmodule GannbaruzoiWeb.PageControllerTest do
+  use GannbaruzoiWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

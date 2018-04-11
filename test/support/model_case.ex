@@ -16,7 +16,8 @@ defmodule Gannbaruzoi.ModelCase do
 
   alias Ecto.Adapters.SQL.Sandbox
   alias Ecto.Changeset
-  alias Gannbaruzoi.{Repo, ErrorHelpers}
+  alias Gannbaruzoi.Repo
+  alias GannbaruzoiWeb.ErrorHelpers
 
   using do
     quote do

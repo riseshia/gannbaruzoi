@@ -1,5 +1,5 @@
 defmodule Gannbaruzoi.ContextTest do
-  use Gannbaruzoi.ConnCase
+  use GannbaruzoiWeb.ConnCase
 
   alias Gannbaruzoi.{User, Repo, Context}
 

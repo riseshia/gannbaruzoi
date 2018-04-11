@@ -1,4 +1,4 @@
-defmodule Gannbaruzoi.UserSocket do
+defmodule GannbaruzoiWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
@@ -31,7 +31,7 @@ defmodule Gannbaruzoi.UserSocket do
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
   #
-  #     Gannbaruzoi.Endpoint.broadcast(
+  #     GannbaruzoiWeb.Endpoint.broadcast(
   #       "users_socket:#{user.id}", "disconnect", %{}
   #     )
   #

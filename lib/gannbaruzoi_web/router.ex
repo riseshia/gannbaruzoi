@@ -1,5 +1,5 @@
-defmodule Gannbaruzoi.Router do
-  use Gannbaruzoi.Web, :router
+defmodule GannbaruzoiWeb.Router do
+  use GannbaruzoiWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -24,7 +24,7 @@ defmodule Gannbaruzoi.Router do
 
   forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Gannbaruzoi.Schema
 
-  scope "/", Gannbaruzoi do
+  scope "/", GannbaruzoiWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index

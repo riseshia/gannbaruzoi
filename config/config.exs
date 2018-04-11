@@ -10,10 +10,10 @@ config :gannbaruzoi,
   ecto_repos: [Gannbaruzoi.Repo]
 
 # Configures the endpoint
-config :gannbaruzoi, Gannbaruzoi.Endpoint,
+config :gannbaruzoi, GannbaruzoiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "9wFfMKO7EPkb41ReVbJak16qk0IhOSD851mvUJJILsq4GK+2EmF+wEZOuP/HReUX",
-  render_errors: [view: Gannbaruzoi.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: GannbaruzoiWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Gannbaruzoi.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

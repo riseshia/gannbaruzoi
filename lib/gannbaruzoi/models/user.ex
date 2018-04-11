@@ -3,7 +3,7 @@ defmodule Gannbaruzoi.User do
   User model
   """
 
-  use Gannbaruzoi.Web, :model
+  use GannbaruzoiWeb, :model
   alias Gannbaruzoi.{Repo, User}
   alias Comeonin.Bcrypt
 

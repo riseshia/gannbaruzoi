@@ -1,11 +1,11 @@
-defmodule Gannbaruzoi do
+defmodule Gannbaruzoi.Application do
   @moduledoc """
   Gannbaruzoi Application
   """
 
   use Application
 
-  alias Gannbaruzoi.Endpoint
+  alias GannbaruzoiWeb.Endpoint
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -17,7 +17,7 @@ defmodule Gannbaruzoi do
       # Start the Ecto repository
       supervisor(Gannbaruzoi.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Gannbaruzoi.Endpoint, [])
+      supervisor(GannbaruzoiWeb.Endpoint, [])
       # Start your own worker by calling:
       #   Gannbaruzoi.Worker.start_link(arg1, arg2, arg3)
       #
