@@ -1,5 +1,5 @@
 defmodule Gannbaruzoi.ContextTest do
-  use Gannbaruzoi.ConnCase
+  use GannbaruzoiWeb.ConnCase
 
   alias Gannbaruzoi.{User, Repo, Context}
 
@@ -46,7 +46,8 @@ defmodule Gannbaruzoi.ContextTest do
   end
 
   defp generate_auth do
-    Repo.get_by!(User, email: @email)
+    User
+    |> Repo.get_by!(email: @email)
     |> User.build_session()
     |> Repo.update!()
     |> Map.get(:auth)

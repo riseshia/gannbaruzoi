@@ -3,7 +3,7 @@ defmodule Gannbaruzoi.Log do
   Log model
   """
 
-  use Gannbaruzoi.Web, :model
+  use GannbaruzoiWeb, :model
 
   alias Gannbaruzoi.Task
 

@@ -1,4 +1,8 @@
 defmodule Gannbaruzoi.QueryHelper do
+  @moduledoc """
+  QueryHelper
+  """
+
   alias Gannbaruzoi.Schema
 
   def execute_query(document, options \\ []) do

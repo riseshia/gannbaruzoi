@@ -1,4 +1,4 @@
-defmodule Gannbaruzoi.PageController do
+defmodule GannbaruzoiWeb.PageController do
   @schema """
   query IntrospectionQuery {
     __schema {
@@ -93,7 +93,7 @@ defmodule Gannbaruzoi.PageController do
   }
   """
 
-  use Gannbaruzoi.Web, :controller
+  use GannbaruzoiWeb, :controller
 
   def index(conn, _params) do
     render conn, "index.html"

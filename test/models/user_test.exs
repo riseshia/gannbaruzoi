@@ -56,7 +56,8 @@ defmodule Gannbaruzoi.UserTest do
       client = auth.client
 
       user =
-        Repo.get_by!(User, email: email)
+        User
+        |> Repo.get_by!(email: email)
         |> User.delete_session(client)
         |> Repo.update!()
 
@@ -94,7 +95,8 @@ defmodule Gannbaruzoi.UserTest do
   defp generate_auth(email) do
     insert!(:user, %{email: email})
 
-    Repo.get_by!(User, email: email)
+    User
+    |> Repo.get_by!(email: email)
     |> User.build_session()
     |> Repo.update!()
     |> Map.get(:auth)

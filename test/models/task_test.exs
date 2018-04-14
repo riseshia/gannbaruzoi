@@ -21,7 +21,8 @@ defmodule Gannbaruzoi.TaskTest do
     valid_attrs_with_parent = Map.put(@valid_attrs, :parent_id, parent.id)
 
     task =
-      Task.changeset(%Task{}, valid_attrs_with_parent)
+      %Task{}
+      |> Task.changeset(valid_attrs_with_parent)
       |> Repo.insert!()
 
     assert "branch" = task.type
@@ -29,7 +30,8 @@ defmodule Gannbaruzoi.TaskTest do
 
   test "type will be root unless it have parent" do
     task =
-      Task.changeset(%Task{}, @valid_attrs)
+      %Task{}
+      |> Task.changeset(@valid_attrs)
       |> Repo.insert!()
 
     assert "root" = task.type

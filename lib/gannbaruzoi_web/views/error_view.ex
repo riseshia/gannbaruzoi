@@ -1,5 +1,5 @@
-defmodule Gannbaruzoi.ErrorView do
-  use Gannbaruzoi.Web, :view
+defmodule GannbaruzoiWeb.ErrorView do
+  use GannbaruzoiWeb, :view
 
   def render("404.html", _assigns) do
     "Page not found"

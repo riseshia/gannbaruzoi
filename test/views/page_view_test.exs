@@ -1,3 +1,3 @@
-defmodule Gannbaruzoi.PageViewTest do
-  use Gannbaruzoi.ConnCase, async: true
+defmodule GannbaruzoiWeb.PageViewTest do
+  use GannbaruzoiWeb.ConnCase, async: true
 end
