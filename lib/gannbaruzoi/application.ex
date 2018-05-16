@@ -17,11 +17,12 @@ defmodule Gannbaruzoi.Application do
       # Start the Ecto repository
       supervisor(Gannbaruzoi.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(GannbaruzoiWeb.Endpoint, [])
+      supervisor(GannbaruzoiWeb.Endpoint, []),
       # Start your own worker by calling:
       #   Gannbaruzoi.Worker.start_link(arg1, arg2, arg3)
       #
       # worker(Gannbaruzoi.Worker, [arg1, arg2, arg3]),
+      supervisor(Absinthe.Subscription, [GannbaruzoiWeb.Endpoint]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

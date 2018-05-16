@@ -1,26 +1,30 @@
 defmodule GannbaruzoiWeb.UserSocket do
   use Phoenix.Socket
+  use Absinthe.Phoenix.Socket, schema: Gannbaruzoi.Schema
 
-  ## Channels
-  # channel "room:*", Gannbaruzoi.RoomChannel
+  alias Gannbaruzoi.User
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
-  # transport :longpoll, Phoenix.Transports.LongPoll
 
-  # Socket params are passed from the client and can
-  # be used to verify and authenticate a user. After
-  # verification, you can put default assigns into
-  # the socket that will be set for all channels, ie
-  #
-  #     {:ok, assign(socket, :user_id, verified_user_id)}
-  #
-  # To deny connection, return `:error`.
-  #
-  # See `Phoenix.Token` documentation for examples in
-  # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(params, socket) do
+    with current_user <- fetch_user(params),
+         true <- current_user && has_valid_token?(current_user, params) do
+      socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{
+        current_user: current_user
+      })
+      {:ok, socket}
+    else
+      _ -> {:error, %{reason: "Unauthorized"}}
+    end
+  end
+
+  defp fetch_user(%{"user_id" => id}) do
+    Gannbaruzoi.Repo.get(User, id)
+  end
+
+  defp has_valid_token?(user, %{"client" => client, "access_token" => access_token}) do
+    User.valid_token?(user, client, access_token)
   end
 
   # Socket id's are topics that allow you to identify all sockets

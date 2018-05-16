@@ -22,7 +22,7 @@ defmodule GannbaruzoiWeb.Router do
     forward "/", Absinthe.Plug, schema: Gannbaruzoi.Schema
   end
 
-  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Gannbaruzoi.Schema
+  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Gannbaruzoi.Schema, socket: GannbaruzoiWeb.UserSocket
 
   scope "/", GannbaruzoiWeb do
     pipe_through :browser # Use the default browser stack

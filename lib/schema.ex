@@ -115,4 +115,18 @@ defmodule Gannbaruzoi.Schema do
       resolve(&LogResolver.delete/2)
     end
   end
+
+  subscription do
+    field :task_created, :task do
+      arg(:user_id, non_null(:id))
+
+      config fn args, _ ->
+        {:ok, topic: "user:#{args.user_id}"}
+      end
+
+      trigger :create_task, topic: fn task ->
+        "user:#{task.user_id}"
+      end
+    end
+  end
 end
